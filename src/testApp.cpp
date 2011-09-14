@@ -5,14 +5,34 @@ void testApp::setup(){
 	
 	receiver.setup( PORT );
 	ofSetFrameRate(60);
+	outputMode = 1;
+	numStars = 200;
 	
 	screenWidth = ofGetScreenWidth();
 	screenHeight = ofGetScreenHeight();
 	
-	for(int i = 0; i < 20; i++){
+	for(int i = 0; i < 20; i++)dsUsers[i].setUp();
+	
+	ttf.loadFont("verdana.ttf", 70, true, true);
+	
+	for(int i = 0; i < numStars; i ++){
+	
+		star newStar;
+		newStar.pos.set(min(ofRandom(0,screenWidth/2),ofRandom(0,screenWidth/2)), 
+						min(ofRandom(0,screenWidth/2),ofRandom(0,screenWidth/2)));
 		
-		dsUsers[i].setUp();
+		if(ofRandom(0,1) > 0.49)newStar.pos.x *= -1;
+		if(ofRandom(0,1) > 0.49)newStar.pos.y *= -1;
+		
+		//bias towards centre
+		
+		newStar.size = ofRandom(0.5,3);
+		newStar.id = i;
+		stars.push_back(newStar);
+		
+		
 	}
+	
 	
 }
 
@@ -64,6 +84,12 @@ void testApp::update(){
 								);
 			
 		}
+		
+		if	(m.getAddress() == "/calib" )
+		{
+			calibStage = m.getArgAsInt32(0);
+			calibCount = m.getArgAsInt32(1); 
+		}
 	}
 	
 	
@@ -79,7 +105,7 @@ void testApp::update(){
 		
 	}
 	
-	
+	for(int i = 0; i < numStars; i ++){stars[i].update();}
 	
 }
 
@@ -87,27 +113,84 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
 	
-	ofBackground( 255, 255, 255 );
-	ofSetColor(150);
-	
-	glPushMatrix();
-	glTranslatef(screenWidth/2,screenHeight/2,0);
-	
-	for(int i =0; i <activeList.size(); i++){
+	if(outputMode == 1){
+		
+		ofBackground( 255, 255, 255 );
+		ofSetColor(150);
+		float col = screenWidth/12;
+		float row = screenHeight/8;
+		ofNoFill();
+		for(int i = 1; i < 11; i++)ofLine(0, row * i, screenWidth, row*i);
+		for(int i = 1; i < 12; i++)ofLine(col * i, 0, col * i, screenHeight);
+		ofCircle(screenWidth/2, screenHeight/2, 25);
+		
+		
+		ofSetColor(255, 0, 0);
+		switch (calibStage) {
+			case 1:
+				ttf.drawString(ofToString(calibCount,0), 20, 70);
+				break;
+				
+			case 2:
+				ttf.drawString(ofToString(calibCount,0), screenWidth - 70, screenHeight - 30);
+				break;
+				
+			case 3:
+				ttf.drawString(ofToString(calibCount,0), 20, screenHeight - 30);
+				break;
+				
+			case 10:
+				ttf.drawString("FAILED", screenWidth/2 - 150, screenHeight/2 - 25);
+				break;
+				
+		}
+		
+		glPushMatrix();
+		glTranslatef(screenWidth/2,screenHeight/2,0);
 		
 		ofFill();
-		ofCircle(dsUsers[activeList[i]].avPos.x, 
-				 dsUsers[activeList[i]].avPos.y, 
-				 10);
+		for(int i =0; i <activeList.size(); i++){
+			ofCircle(dsUsers[activeList[i]].avPos.x, 
+					 dsUsers[activeList[i]].avPos.y, 
+					 10);
+			
+		}
+		
+		
+		glPopMatrix();
+		
+	}else if(outputMode == 2){
+		
+		ofBackground(0);
+		
+		ofSetColor(255,255,255);
+		glPushMatrix();
+		glTranslatef(screenWidth/2,screenHeight/2,0);
+		for(int i = 0; i < stars.size(); i ++){
+		
+			ofCircle(stars[i].pos.x, stars[i].pos.y, stars[i].size);
+			
+		}
+		
+		
+		ofFill();
+		for(int i =0; i <activeList.size(); i++){
+			ofCircle(dsUsers[activeList[i]].avPos.x, 
+					 dsUsers[activeList[i]].avPos.y, 
+					 10);
+			
+		}
+		
+		glPopMatrix();
 		
 	}
 	
-	ofNoFill();
-	ofCircle(0, 0, 50);
-	glPopMatrix();
 	
 	
 }
+
+
+
 
 //--------------------------------------------------------------
 void testApp::keyPressed  (int key){

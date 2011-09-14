@@ -29,8 +29,6 @@ public:
 		
 	};
 	
-
-	
 	void updateHistory(){
 		
 		static int i = 0;

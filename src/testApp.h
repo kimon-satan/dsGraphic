@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxOsc.h"
 #include "dsUser.h"
+#include "star.h"
 
 #define PORT 12345
 
@@ -25,11 +26,18 @@ public:
 
 private:
 	ofxOscReceiver	receiver;
+	ofTrueTypeFont ttf;
+	
+	float screenWidth, screenHeight;
 	
 	vector <int> activeList;
 	dsUser dsUsers[20];
 	
 	int outputMode;
+	int calibStage, calibCount;
 	
-	float screenWidth, screenHeight;
+	vector<star> stars;
+	int numStars;
+	
+	
 };
