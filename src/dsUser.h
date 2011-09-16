@@ -14,32 +14,31 @@ class dsUser{
 	
 public:
 	
-	dsUser(){};
-	
-	void setUp(){
-		pos.set(0,0);
-		active = false;
-		historySize = 40;
+	dsUser(){
 		
+		reset();
 		for(int i = 0; i < historySize; i ++){
 			history.push_back(pos);	
 		}
-		
-		ghostCount = 20;
-		
+	
 	};
+	
+	void reset(){
+		
+		pos.set(0,0);
+		isActive = false;
+		historySize = 40;
+		isPaired = false;	
+		ghostCount = 0;
+		
+	}
+	
 	
 	void updateHistory(){
 		
-		static int i = 0;
-		i = (i+1)%historySize;
-		history[i] = pos;
-
-		if(!active){
-			for(int j = 0; j < historySize; j ++){
-				history[j] = pos;
-			}
-			active = true;
+		history.push_back(pos);
+		if(history.size() > historySize){
+			history.erase(history.begin());
 		}
 		
 		avPos = ofVec2f(0,0);
@@ -47,8 +46,19 @@ public:
 			avPos += history[j];
 		}
 		
-		avPos /= historySize; 
+		avPos /= history.size(); 
 		if(ghostCount > 0) ghostCount += 1;
+	}
+	
+	float getSDev(){
+		
+		float sd;
+		
+		for(int i = 0; i < history.size(); i++)sd += avPos.distance(history[i]);
+
+		sd /= history.size();
+		
+		return sd; //I know this isn't sd but I don't have internet !
 	}
 	
 	
@@ -57,7 +67,9 @@ public:
 	ofVec2f avPos;
 	ofVec2f pos;
 	vector<ofVec2f>  history;
-	bool active;
+	bool isActive;
+	int starId;
+	bool isPaired;
 	
 };
 

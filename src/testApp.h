@@ -14,6 +14,9 @@ public:
 	void update();
 	void draw();
 	
+	void pairPointsnStars();
+	void manageStars();
+	
 	void keyPressed(int key);
 	void keyReleased(int key);
 	void mouseMoved(int x, int y );
@@ -37,7 +40,9 @@ private:
 	int calibStage, calibCount;
 	
 	vector<star> stars;
+	vector<star *> activeStarList;
 	int numStars;
-	
+	double distThresh;
+	bool showPoints;
 	
 };

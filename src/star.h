@@ -11,6 +11,7 @@
 #define STAR
 
 #include "ofMain.h" 
+#include "dsUser.h"
 
 class star{
 
@@ -25,8 +26,17 @@ public:
 	float rotSpeed;
 	ofVec2f rot_axis;
 	ofVec2f pos;
-	int size;
+	float size;
+	float active_size;
 	int id;
+	
+	dsUser * pairedUser;
+	bool isActive;
+	bool isCovered;
+	
+	ofColor tc;
+	vector<star*>* activeStarList;
+	
 	
 	
 };

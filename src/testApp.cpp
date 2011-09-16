@@ -11,12 +11,10 @@ void testApp::setup(){
 	screenWidth = ofGetScreenWidth();
 	screenHeight = ofGetScreenHeight();
 	
-	for(int i = 0; i < 20; i++)dsUsers[i].setUp();
-	
 	ttf.loadFont("verdana.ttf", 70, true, true);
 	
 	for(int i = 0; i < numStars; i ++){
-	
+		
 		star newStar;
 		newStar.pos.set(min(ofRandom(0,screenWidth/2),ofRandom(0,screenWidth/2)), 
 						min(ofRandom(0,screenWidth/2),ofRandom(0,screenWidth/2)));
@@ -26,12 +24,14 @@ void testApp::setup(){
 		
 		//bias towards centre
 		
-		newStar.size = ofRandom(0.5,3);
 		newStar.id = i;
+		newStar.activeStarList = &activeStarList;
 		stars.push_back(newStar);
 		
 		
 	}
+	
+	distThresh = 100;
 	
 	
 }
@@ -62,6 +62,7 @@ void testApp::update(){
 		if ( m.getAddress() == "/newUser" )
 		{
 			int id = m.getArgAsInt32(0);
+			dsUsers[id].isActive = true;
 			dsUsers[id].pos = ofVec2f(0,0);
 			dsUsers[id].ghostCount = 0;
 			activeList.push_back(id);
@@ -98,17 +99,73 @@ void testApp::update(){
 		dsUsers[activeList[i]].updateHistory();
 		
 		if(dsUsers[activeList[i]].ghostCount > 10){
-			dsUsers[activeList[i]].active = false;
+			dsUsers[activeList[i]].isActive = false;
+			dsUsers[activeList[i]].isPaired = false;
 			activeList.erase(activeList.begin() + i);
 			
 		}
 		
 	}
 	
-	for(int i = 0; i < numStars; i ++){stars[i].update();}
+	if(outputMode == 2){
+		
+		for(int i = 0; i < numStars; i ++){stars[i].update();}
+		pairPointsnStars();
+		
+	}
 	
 }
 
+
+void testApp::pairPointsnStars(){
+	
+	for(int i = 0; i < activeList.size(); i++){
+		
+		if(!dsUsers[activeList[i]].isPaired && 
+		   dsUsers[activeList[i]].history.size() == dsUsers[activeList[i]].historySize){
+			
+			if(dsUsers[activeList[i]].getSDev() < 60){
+				
+				float dist = pow(distThresh,2);
+				int starId = -1;
+				
+				for(int j = 0; j < numStars; j++){
+					
+					if(!stars[j].isActive && !stars[j].isCovered){ 
+						float td = stars[j].pos.squareDistance(dsUsers[activeList[i]].pos); //brute force search for nearest star
+						if(td < dist){
+							starId = j; 
+							dist = td;
+						}										//maybe optimise with a look up table.
+					}
+				}
+				
+				if(starId > 0){ 
+					
+					dsUsers[activeList[i]].isPaired = true;
+					dsUsers[activeList[i]].starId = starId;
+					stars[starId].isActive = true;
+					stars[starId].pairedUser = &dsUsers[activeList[i]];
+					activeStarList.push_back(&stars[starId]);
+				}
+			}
+		}
+		
+	}
+}
+
+void testApp::manageStars(){
+	
+	//first tidy up the active stars
+	for (vector<star*>::iterator it = activeStarList.begin(); it != activeStarList.end(); ++it){ 
+		
+		star * s = *it;
+		if(!s->isActive)activeStarList.erase(it);
+		
+	} 
+	
+
+}
 
 //--------------------------------------------------------------
 void testApp::draw(){
@@ -159,26 +216,35 @@ void testApp::draw(){
 		
 		glPopMatrix();
 		
+		string point_stats = "";
+		
+		for(int i = 0; i < activeList.size(); i++){
+			point_stats += "userId: " + ofToString(activeList[i], 0);
+			point_stats += "   point deviation: " + ofToString(dsUsers[i].getSDev(),3);
+			point_stats += "\n";
+			
+		}
+		
+		ofSetColor(100, 100, 100);
+		ofDrawBitmapString(point_stats, 50, 50);
+		
 	}else if(outputMode == 2){
 		
-		ofBackground(0);
+		ofBackground(0,0,50);
 		
 		ofSetColor(255,255,255);
 		glPushMatrix();
 		glTranslatef(screenWidth/2,screenHeight/2,0);
-		for(int i = 0; i < stars.size(); i ++){
+		for(int i = 0; i < stars.size(); i ++){stars[i].draw();}
 		
-			ofCircle(stars[i].pos.x, stars[i].pos.y, stars[i].size);
-			
-		}
-		
-		
-		ofFill();
-		for(int i =0; i <activeList.size(); i++){
-			ofCircle(dsUsers[activeList[i]].avPos.x, 
-					 dsUsers[activeList[i]].avPos.y, 
-					 10);
-			
+		if(showPoints){
+			ofFill();
+			for(int i =0; i <activeList.size(); i++){
+				ofCircle(dsUsers[activeList[i]].avPos.x, 
+						 dsUsers[activeList[i]].avPos.y, 
+						 10);
+				
+			}
 		}
 		
 		glPopMatrix();
@@ -196,6 +262,8 @@ void testApp::draw(){
 void testApp::keyPressed  (int key){
 	
 	if(key == 'f')ofToggleFullscreen();
+	if(key == 'm')outputMode += 1; outputMode = outputMode%3;
+	if(key == 's')showPoints = !showPoints;
 	
 }
 
