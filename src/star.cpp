@@ -34,6 +34,7 @@ void star::update(){
 		isActive = false;
 		pairedUser = NULL;
 		active_size = size;
+		cout << "pair user dump" <<"\n";
 	}else{
 		active_size *= 1.01;
 	}

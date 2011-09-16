@@ -17,22 +17,21 @@ public:
 	dsUser(){
 		
 		reset();
-		for(int i = 0; i < historySize; i ++){
-			history.push_back(pos);	
-		}
+		isActive = true;
 	
-	};
+	}
 	
 	void reset(){
 		
 		pos.set(0,0);
-		isActive = false;
-		historySize = 40;
+		isActive = true;
+		historySize = 3;
 		isPaired = false;	
 		ghostCount = 0;
-		
+		isMoving = false;
+		isStill = true;
+		history.clear();
 	}
-	
 	
 	void updateHistory(){
 		
@@ -67,9 +66,8 @@ public:
 	ofVec2f avPos;
 	ofVec2f pos;
 	vector<ofVec2f>  history;
-	bool isActive;
+	bool isActive, isPaired, isMoving ,isStill;
 	int starId;
-	bool isPaired;
 	
 };
 

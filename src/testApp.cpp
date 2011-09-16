@@ -62,9 +62,7 @@ void testApp::update(){
 		if ( m.getAddress() == "/newUser" )
 		{
 			int id = m.getArgAsInt32(0);
-			dsUsers[id].isActive = true;
-			dsUsers[id].pos = ofVec2f(0,0);
-			dsUsers[id].ghostCount = 0;
+			dsUsers[id].reset();
 			activeList.push_back(id);
 		}
 		
@@ -91,6 +89,13 @@ void testApp::update(){
 			calibStage = m.getArgAsInt32(0);
 			calibCount = m.getArgAsInt32(1); 
 		}
+		
+		if (m.getAddress() == "/isMoving"){
+		
+			int id = m.getArgAsInt32(0);
+			dsUsers[id].isMoving = (bool)m.getArgAsInt32(1);
+
+		}
 	}
 	
 	
@@ -102,7 +107,6 @@ void testApp::update(){
 			dsUsers[activeList[i]].isActive = false;
 			dsUsers[activeList[i]].isPaired = false;
 			activeList.erase(activeList.begin() + i);
-			
 		}
 		
 	}
@@ -124,7 +128,7 @@ void testApp::pairPointsnStars(){
 		if(!dsUsers[activeList[i]].isPaired && 
 		   dsUsers[activeList[i]].history.size() == dsUsers[activeList[i]].historySize){
 			
-			if(dsUsers[activeList[i]].getSDev() < 60){
+			if(!dsUsers[activeList[i]].isMoving){
 				
 				float dist = pow(distThresh,2);
 				int starId = -1;
@@ -207,9 +211,19 @@ void testApp::draw(){
 		
 		ofFill();
 		for(int i =0; i <activeList.size(); i++){
-			ofCircle(dsUsers[activeList[i]].avPos.x, 
-					 dsUsers[activeList[i]].avPos.y, 
-					 10);
+			
+			
+			if(dsUsers[activeList[i]].isMoving){
+				ofCircle(dsUsers[activeList[i]].avPos.x, 
+						 dsUsers[activeList[i]].avPos.y, 
+						 10);
+				}else{
+					   ofSetRectMode(OF_RECTMODE_CENTER);
+					   ofRect(dsUsers[activeList[i]].avPos.x, 
+							  dsUsers[activeList[i]].avPos.y,
+							  10,10);
+					   ofSetRectMode(OF_RECTMODE_CORNER);
+				}
 			
 		}
 		
@@ -240,10 +254,17 @@ void testApp::draw(){
 		if(showPoints){
 			ofFill();
 			for(int i =0; i <activeList.size(); i++){
-				ofCircle(dsUsers[activeList[i]].avPos.x, 
-						 dsUsers[activeList[i]].avPos.y, 
-						 10);
-				
+				if(dsUsers[activeList[i]].isMoving){
+					ofCircle(dsUsers[activeList[i]].avPos.x, 
+							 dsUsers[activeList[i]].avPos.y, 
+							 10);
+				}else{
+					ofSetRectMode(OF_RECTMODE_CENTER);
+					ofRect(dsUsers[activeList[i]].avPos.x, 
+						   dsUsers[activeList[i]].avPos.y,
+						   10,10);
+					ofSetRectMode(OF_RECTMODE_CORNER);
+				}
 			}
 		}
 		

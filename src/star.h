@@ -38,7 +38,6 @@ public:
 	vector<star*>* activeStarList;
 	
 	
-	
 };
 
 
