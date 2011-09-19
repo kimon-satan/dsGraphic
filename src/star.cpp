@@ -13,11 +13,11 @@
 star::star(){
 	
 	rotSpeed = 0.025;
-	rot_axis.set(ofRandom(-20,20), ofRandom(-20,20));
+	rot_axis.set(0,0);
 	isActive = false;
 	isCovered = false;
 	pairedUser = NULL;
-	size = ofRandom(0.5,2);
+	size = ofRandom(1,2);
 	active_size = size;
 	
 	tc.r = ofRandom(200,255);
@@ -34,7 +34,6 @@ void star::update(){
 		isActive = false;
 		pairedUser = NULL;
 		active_size = size;
-		cout << "pair user dump" <<"\n";
 	}else{
 		active_size *= 1.01;
 	}

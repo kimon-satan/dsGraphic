@@ -29,8 +29,8 @@ public:
 		isPaired = false;	
 		ghostCount = 0;
 		isMoving = false;
-		isStill = true;
 		history.clear();
+		stillCount = 0;
 	}
 	
 	void updateHistory(){
@@ -47,6 +47,10 @@ public:
 		
 		avPos /= history.size(); 
 		if(ghostCount > 0) ghostCount += 1;
+		
+		if(!isMoving){ 
+			stillCount += 1;
+		}else{ stillCount = 0;}
 	}
 	
 	float getSDev(){
@@ -63,10 +67,11 @@ public:
 	
 	int historySize;
 	int ghostCount;
+	int stillCount;
 	ofVec2f avPos;
 	ofVec2f pos;
 	vector<ofVec2f>  history;
-	bool isActive, isPaired, isMoving ,isStill;
+	bool isActive, isPaired, isMoving ,isStill, isFake;
 	int starId;
 	
 };

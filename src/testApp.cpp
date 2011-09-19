@@ -2,11 +2,12 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-	
+	ofSetCircleResolution(100);
 	receiver.setup( PORT );
 	ofSetFrameRate(60);
 	outputMode = 1;
 	numStars = 200;
+	showPoints = false;
 	
 	screenWidth = ofGetScreenWidth();
 	screenHeight = ofGetScreenHeight();
@@ -16,13 +17,11 @@ void testApp::setup(){
 	for(int i = 0; i < numStars; i ++){
 		
 		star newStar;
-		newStar.pos.set(min(ofRandom(0,screenWidth/2),ofRandom(0,screenWidth/2)), 
-						min(ofRandom(0,screenWidth/2),ofRandom(0,screenWidth/2)));
 		
-		if(ofRandom(0,1) > 0.49)newStar.pos.x *= -1;
-		if(ofRandom(0,1) > 0.49)newStar.pos.y *= -1;
-		
-		//bias towards centre
+		float dist = ofRandom(0, screenHeight/2);
+		ofVec2f pos(0,dist);
+		pos.rotate(ofRandom(0,359),ofVec2f(0,0));
+		newStar.pos = pos;
 		
 		newStar.id = i;
 		newStar.activeStarList = &activeStarList;
@@ -31,7 +30,7 @@ void testApp::setup(){
 		
 	}
 	
-	distThresh = 100;
+	distThresh = 1000;
 	
 	
 }
@@ -82,6 +81,8 @@ void testApp::update(){
 								-m.getArgAsFloat(2) * screenHeight
 								);
 			
+			dsUsers[id].isFake = m.getArgAsInt32(3);
+			
 		}
 		
 		if	(m.getAddress() == "/calib" )
@@ -128,7 +129,7 @@ void testApp::pairPointsnStars(){
 		if(!dsUsers[activeList[i]].isPaired && 
 		   dsUsers[activeList[i]].history.size() == dsUsers[activeList[i]].historySize){
 			
-			if(!dsUsers[activeList[i]].isMoving){
+			if(dsUsers[activeList[i]].stillCount > 30){
 				
 				float dist = pow(distThresh,2);
 				int starId = -1;
@@ -209,6 +210,9 @@ void testApp::draw(){
 		glPushMatrix();
 		glTranslatef(screenWidth/2,screenHeight/2,0);
 		
+		
+		
+		
 		ofFill();
 		for(int i =0; i <activeList.size(); i++){
 			
@@ -218,10 +222,16 @@ void testApp::draw(){
 						 dsUsers[activeList[i]].avPos.y, 
 						 10);
 				}else{
+					
+					if(dsUsers[activeList[i]].isFake){
+						ofNoFill();
+					}else{
+						ofFill();
+					}
 					   ofSetRectMode(OF_RECTMODE_CENTER);
 					   ofRect(dsUsers[activeList[i]].avPos.x, 
 							  dsUsers[activeList[i]].avPos.y,
-							  10,10);
+							  20,20);
 					   ofSetRectMode(OF_RECTMODE_CORNER);
 				}
 			
@@ -244,12 +254,17 @@ void testApp::draw(){
 		
 	}else if(outputMode == 2){
 		
-		ofBackground(0,0,50);
+		ofBackground(0);
+		ofSetColor(0,0,50);
+		ofFill();
+		
+		ofCircle(screenWidth/2,screenHeight/2, screenHeight/2);
 		
 		ofSetColor(255,255,255);
 		glPushMatrix();
 		glTranslatef(screenWidth/2,screenHeight/2,0);
 		for(int i = 0; i < stars.size(); i ++){stars[i].draw();}
+		
 		
 		if(showPoints){
 			ofFill();
