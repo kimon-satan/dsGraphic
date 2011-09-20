@@ -21,19 +21,30 @@ public:
 	~star();
 	
 	void update();
+	void findConflicts();
+	void findIsCovered();
 	void draw();
+	void drawActiveAlgorithm();
+	void twinkle();
 	
 	float rotSpeed;
 	ofVec2f rot_axis;
 	ofVec2f pos;
 	float size;
 	float active_size;
+	float intensity;
+	float worldCircum;
 	int id;
+	bool twinkling;
 	
 	dsUser * pairedUser;
 	bool isActive;
 	bool isCovered;
-	
+	float base;
+	float add;
+	float inc;
+
+
 	ofColor tc;
 	vector<star*>* activeStarList;
 	

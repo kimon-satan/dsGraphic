@@ -30,6 +30,7 @@ public:
 private:
 	ofxOscReceiver	receiver;
 	ofTrueTypeFont ttf;
+	ofImage bg;
 	
 	float screenWidth, screenHeight;
 	
@@ -44,5 +45,9 @@ private:
 	int numStars;
 	double distThresh;
 	bool showPoints;
+	
+	bool testPoint;
+	int testIndex;
+	float radius, circum;
 	
 };

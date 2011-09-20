@@ -2,41 +2,53 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-	ofSetCircleResolution(100);
+	
+	ofSetCircleResolution(50);
 	receiver.setup( PORT );
+	ofSetVerticalSync(true);
 	ofSetFrameRate(60);
 	outputMode = 1;
-	numStars = 200;
+	int rows = 30;
+	int columns = 40;
+	numStars = rows * columns;
 	showPoints = false;
 	
 	screenWidth = ofGetScreenWidth();
 	screenHeight = ofGetScreenHeight();
+	radius = screenHeight;
+	circum = screenWidth;
 	
+	bg.loadImage("hubble.jpg");
 	ttf.loadFont("verdana.ttf", 70, true, true);
 	
-	for(int i = 0; i < numStars; i ++){
-		
-		star newStar;
-		
-		float dist = ofRandom(0, screenHeight/2);
-		ofVec2f pos(0,dist);
-		pos.rotate(ofRandom(0,359),ofVec2f(0,0));
-		newStar.pos = pos;
-		
-		newStar.id = i;
-		newStar.activeStarList = &activeStarList;
-		stars.push_back(newStar);
-		
-		
+	int noise = 6;
+	int count = 0;
+	for(int i = 0; i < columns; i ++){ 
+		for(int j = 0; j < rows; j ++){ 
+			star newStar;
+			newStar.worldCircum = circum;
+			newStar.pos = ofVec2f(-circum/2 + (i+1) * circum/columns, -radius/2 + (j+1) * radius/rows);
+			ofVec2f displace(ofRandom(-noise,noise), ofRandom(-noise,noise));
+			newStar.pos += displace;
+			newStar.id = count;
+			newStar.activeStarList = &activeStarList;
+			stars.push_back(newStar);
+			count ++;
+		} 
 	}
 	
+	for(int i =0; i < 20; i++)dsUsers[i].isActive = false;
+	
+	testIndex = 0;
 	distThresh = 1000;
+	testPoint = false;
 	
 	
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
+	
 	
 	// check for waiting messages
 	while( receiver.hasWaitingMessages() )
@@ -114,8 +126,24 @@ void testApp::update(){
 	
 	if(outputMode == 2){
 		
-		for(int i = 0; i < numStars; i ++){stars[i].update();}
+		for(int i = 0; i < numStars; i ++){
+			
+			stars[i].update();
+			
+			if(!stars[i].twinkling){
+
+				float twink = ofRandom(0,1);
+				if(twink <= (float)1/(numStars * 10)){
+					stars[i].twinkle();
+					
+				} //should equal one every 2 secs
+			}
+		
+		}
+		
+		manageStars();
 		pairPointsnStars();
+		
 		
 	}
 	
@@ -126,8 +154,7 @@ void testApp::pairPointsnStars(){
 	
 	for(int i = 0; i < activeList.size(); i++){
 		
-		if(!dsUsers[activeList[i]].isPaired && 
-		   dsUsers[activeList[i]].history.size() == dsUsers[activeList[i]].historySize){
+		if(!dsUsers[activeList[i]].isPaired){
 			
 			if(dsUsers[activeList[i]].stillCount > 30){
 				
@@ -162,10 +189,10 @@ void testApp::pairPointsnStars(){
 void testApp::manageStars(){
 	
 	//first tidy up the active stars
-	for (vector<star*>::iterator it = activeStarList.begin(); it != activeStarList.end(); ++it){ 
 		
-		star * s = *it;
-		if(!s->isActive)activeStarList.erase(it);
+	for(int i = 0; i < activeStarList.size(); i ++){
+		
+		if(!activeStarList[i]->isActive)activeStarList.erase(activeStarList.begin() + i);
 		
 	} 
 	
@@ -218,8 +245,8 @@ void testApp::draw(){
 			
 			
 			if(dsUsers[activeList[i]].isMoving){
-				ofCircle(dsUsers[activeList[i]].avPos.x, 
-						 dsUsers[activeList[i]].avPos.y, 
+				ofCircle(dsUsers[activeList[i]].pos.x, 
+						 dsUsers[activeList[i]].pos.y, 
 						 10);
 				}else{
 					
@@ -229,8 +256,8 @@ void testApp::draw(){
 						ofFill();
 					}
 					   ofSetRectMode(OF_RECTMODE_CENTER);
-					   ofRect(dsUsers[activeList[i]].avPos.x, 
-							  dsUsers[activeList[i]].avPos.y,
+					   ofRect(dsUsers[activeList[i]].pos.x, 
+							  dsUsers[activeList[i]].pos.y,
 							  20,20);
 					   ofSetRectMode(OF_RECTMODE_CORNER);
 				}
@@ -240,7 +267,7 @@ void testApp::draw(){
 		
 		glPopMatrix();
 		
-		string point_stats = "";
+		/*string point_stats = "";
 		
 		for(int i = 0; i < activeList.size(); i++){
 			point_stats += "userId: " + ofToString(activeList[i], 0);
@@ -250,15 +277,16 @@ void testApp::draw(){
 		}
 		
 		ofSetColor(100, 100, 100);
-		ofDrawBitmapString(point_stats, 50, 50);
+		ofDrawBitmapString(point_stats, 50, 50);*/
 		
 	}else if(outputMode == 2){
 		
 		ofBackground(0);
+		//bg.draw(0,0,circum/2,radius);
 		ofSetColor(0,0,50);
 		ofFill();
 		
-		ofCircle(screenWidth/2,screenHeight/2, screenHeight/2);
+		//ofCircle(screenWidth/2,screenHeight/2, screenHeight/2);
 		
 		ofSetColor(255,255,255);
 		glPushMatrix();
@@ -270,13 +298,13 @@ void testApp::draw(){
 			ofFill();
 			for(int i =0; i <activeList.size(); i++){
 				if(dsUsers[activeList[i]].isMoving){
-					ofCircle(dsUsers[activeList[i]].avPos.x, 
-							 dsUsers[activeList[i]].avPos.y, 
+					ofCircle(dsUsers[activeList[i]].pos.x, 
+							 dsUsers[activeList[i]].pos.y, 
 							 10);
 				}else{
 					ofSetRectMode(OF_RECTMODE_CENTER);
-					ofRect(dsUsers[activeList[i]].avPos.x, 
-						   dsUsers[activeList[i]].avPos.y,
+					ofRect(dsUsers[activeList[i]].pos.x, 
+						   dsUsers[activeList[i]].pos.y,
 						   10,10);
 					ofSetRectMode(OF_RECTMODE_CORNER);
 				}
@@ -284,6 +312,10 @@ void testApp::draw(){
 		}
 		
 		glPopMatrix();
+		
+	}else if(outputMode == 3){
+	
+		
 		
 	}
 	
@@ -298,8 +330,11 @@ void testApp::draw(){
 void testApp::keyPressed  (int key){
 	
 	if(key == 'f')ofToggleFullscreen();
-	if(key == 'm')outputMode += 1; outputMode = outputMode%3;
+	if(key == 'm')outputMode += 1; outputMode = outputMode%4;
 	if(key == 's')showPoints = !showPoints;
+	if(key == 't')testPoint = true;
+	if(key == '+')testIndex = (testIndex +1)%3;
+	if(key == 'd'){stars[100].twinkle();}
 	
 }
 
@@ -320,10 +355,29 @@ void testApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
+	
+	if(testPoint){
+		
+		if(!dsUsers[testIndex].isActive){
+			dsUsers[testIndex].reset();
+			activeList.push_back(testIndex);
+			dsUsers[testIndex].pos.set(x -screenWidth/2,y-screenHeight/2);	
+		}else{
+			for(int i =0; i< activeList.size(); i++){
+				if(activeList[i] == testIndex){
+					dsUsers[testIndex].isActive = false;
+					dsUsers[testIndex].isPaired = false;
+					activeList.erase(activeList.begin() + i);
+				}
+			}
+		}
+	}
+	
 }
 
 //--------------------------------------------------------------
 void testApp::mouseReleased(int x, int y, int button){
+	
 	
 }
 
