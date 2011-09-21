@@ -4,6 +4,7 @@
 #include "ofxOsc.h"
 #include "dsUser.h"
 #include "star.h"
+#include "ofxBlurShader.h"
 
 #define PORT 12345
 
@@ -26,6 +27,7 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);		
+	void exit();
 
 private:
 	ofxOscReceiver	receiver;
@@ -33,7 +35,8 @@ private:
 	ofImage bg;
 	
 	float screenWidth, screenHeight;
-	
+	ofxBlurShader blurBG;
+	ofxBlurShader blurFG;
 	vector <int> activeList;
 	dsUser dsUsers[20];
 	

@@ -18,7 +18,9 @@ void testApp::setup(){
 	radius = screenHeight;
 	circum = screenWidth;
 	
-	bg.loadImage("hubble.jpg");
+	blurBG.setup(screenWidth, screenHeight);
+	blurFG.setup(screenWidth, screenHeight);
+	
 	ttf.loadFont("verdana.ttf", 70, true, true);
 	
 	int noise = 6;
@@ -42,6 +44,7 @@ void testApp::setup(){
 	testIndex = 0;
 	distThresh = 1000;
 	testPoint = false;
+	glDisable(GL_DEPTH_TEST); 
 	
 	
 }
@@ -124,7 +127,7 @@ void testApp::update(){
 		
 	}
 	
-	if(outputMode == 2){
+	if(outputMode >= 2){
 		
 		for(int i = 0; i < numStars; i ++){
 			
@@ -133,8 +136,8 @@ void testApp::update(){
 			if(!stars[i].twinkling){
 
 				float twink = ofRandom(0,1);
-				if(twink <= (float)1/(numStars * 10)){
-					stars[i].twinkle();
+				if(twink <= (float)1/(numStars)){
+				stars[i].twinkle();
 					
 				} //should equal one every 2 secs
 			}
@@ -202,6 +205,8 @@ void testApp::manageStars(){
 //--------------------------------------------------------------
 void testApp::draw(){
 	
+	ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+	
 	if(outputMode == 1){
 		
 		ofBackground( 255, 255, 255 );
@@ -238,8 +243,6 @@ void testApp::draw(){
 		glTranslatef(screenWidth/2,screenHeight/2,0);
 		
 		
-		
-		
 		ofFill();
 		for(int i =0; i <activeList.size(); i++){
 			
@@ -264,37 +267,23 @@ void testApp::draw(){
 			
 		}
 		
-		
 		glPopMatrix();
-		
-		/*string point_stats = "";
-		
-		for(int i = 0; i < activeList.size(); i++){
-			point_stats += "userId: " + ofToString(activeList[i], 0);
-			point_stats += "   point deviation: " + ofToString(dsUsers[i].getSDev(),3);
-			point_stats += "\n";
-			
-		}
-		
-		ofSetColor(100, 100, 100);
-		ofDrawBitmapString(point_stats, 50, 50);*/
+
 		
 	}else if(outputMode == 2){
 		
 		ofBackground(0);
-		//bg.draw(0,0,circum/2,radius);
-		ofSetColor(0,0,50);
-		ofFill();
 		
-		//ofCircle(screenWidth/2,screenHeight/2, screenHeight/2);
-		
-		ofSetColor(255,255,255);
 		glPushMatrix();
 		glTranslatef(screenWidth/2,screenHeight/2,0);
-		for(int i = 0; i < stars.size(); i ++){stars[i].draw();}
-		
+		for(int i = 0; i < stars.size(); i ++)stars[i].drawBG(false); 
+		for(int i = 0; i < stars.size(); i ++)stars[i].drawActiveAlgorithm(false); 
+		glPopMatrix();
 		
 		if(showPoints){
+			
+			glPushMatrix();
+			glTranslatef(screenWidth/2,screenHeight/2,0);
 			ofFill();
 			for(int i =0; i <activeList.size(); i++){
 				if(dsUsers[activeList[i]].isMoving){
@@ -309,17 +298,56 @@ void testApp::draw(){
 					ofSetRectMode(OF_RECTMODE_CORNER);
 				}
 			}
+			glPopMatrix();
 		}
-		
-		glPopMatrix();
+			 
 		
 	}else if(outputMode == 3){
-	
 		
+		
+		blurBG.begin(1,2);
+		ofClear(0, 0, 0, 255); //black bg
+		glPushMatrix();
+		glTranslatef(screenWidth/2, screenHeight/2, 0);
+		for(int i = 0; i < stars.size(); i ++)stars[i].drawBG(false);
+		glPopMatrix();
+		blurBG.end();
+		
+		blurFG.begin(1,1);
+		glPushMatrix();
+		glTranslatef(screenWidth/2, screenHeight/2, 0);
+		for(int i = 0; i < stars.size(); i ++)stars[i].drawActiveAlgorithm(false); 
+		glPopMatrix();
+		blurFG.end();
+		
+		ofSetColor(255);
+		blurBG.draw(); 
+		
+		ofEnableBlendMode(OF_BLENDMODE_ADD);
+		glPushMatrix();
+		glTranslatef(screenWidth/2, screenHeight/2, 0);
+		for(int i = 0; i < stars.size(); i ++)stars[i].drawBG(true);
+		glPopMatrix();
+		ofSetColor(255, 255, 255, 255);
+		ofDisableBlendMode();
+		
+		ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+		
+		ofSetColor(255);
+		blurFG.draw(); 
+		
+		ofEnableBlendMode(OF_BLENDMODE_ADD);
+		glPushMatrix();
+		glTranslatef(screenWidth/2, screenHeight/2, 0);
+		for(int i = 0; i < stars.size(); i ++)stars[i].drawActiveAlgorithm(true); 
+		glPopMatrix();
+		ofSetColor(255, 255, 255, 255);
+		ofDisableBlendMode();
 		
 	}
 	
-	
+	ofSetColor(100, 100, 100);
+	ofDrawBitmapString(ofToString(ofGetFrameRate(),2), 20,20);
 	
 }
 
@@ -393,5 +421,11 @@ void testApp::gotMessage(ofMessage msg){
 
 //--------------------------------------------------------------
 void testApp::dragEvent(ofDragInfo dragInfo){ 
+	
+}
+
+void testApp::exit(){
+
+cout << "exit \n";
 	
 }

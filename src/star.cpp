@@ -12,25 +12,38 @@
 
 star::star(){
 	
-	rotSpeed = 0;//0.15;
+	rotSpeed = 0.15;
 	rot_axis.set(0,0);
 	isActive = false;
 	isCovered = false;
 	pairedUser = NULL;
-	size = min(ofRandom(1,5), ofRandom(1,5));
+	size = min(ofRandom(1,7), min(ofRandom(1,7),ofRandom(1,7)));
 	active_size = size;
 	
-	tc.r = max(ofRandom(200,255),ofRandom(200,255));
-	tc.g = max(ofRandom(200,255),ofRandom(200,255));
-	tc.b = max(ofRandom(200,255),ofRandom(200,255));
-	tc.a = min(ofRandom(0,200), ofRandom(0,200));
+	tc.r = 255;
+	tc.g = 255; 
+	tc.b = 255;
+	tc.a = 255; 
+	
+	if(size < 2){
+		alpha = 180;
+		intensity = min(ofRandom(0.1,0.3), ofRandom(0.1,0.2));
+	}else if(size < 5){
+		alpha = 90;
+		intensity = min(ofRandom(0.1,0.3), ofRandom(0.1,0.2));
+	}else{
+		alpha = 50;
+		intensity = min(ofRandom(0.1,0.3), ofRandom(0.1,0.2));
+	}
+	
 	twinkling = false;
-	base = tc.a;
-
+	base = intensity;
+	
 	
 }
 
 void star::update(){
+	
 	
 	if(!isActive){
 		pos.x += rotSpeed;
@@ -47,12 +60,11 @@ void star::update(){
 		pairedUser = NULL;
 		active_size = size;
 
-		tc.a = base;
+		intensity = base;
 		//findIsCovered(); //no need as it won't be covered as just disappeared
 		
 	}else{
 		
-		tc.a = 100;
 		findConflicts();
 	}
 	
@@ -112,69 +124,83 @@ void star::findIsCovered(){
 
 void star::twinkle(){
 	
+	static int count;
+	
 	if(!twinkling){
 		twinkling = true;
-		add = ofRandom(0.01,0.02);
+		add = min(ofRandom(0.005,0.04), ofRandom(0.005,0.04));
 		inc = 0.01;
+		count = 0;
 	}
-	
-	float mul = 256 - base;
 		
-		inc += add;
+	inc += add;
+	float mul = 1 - base; 
+	
 	if(add > 0){
-		tc.a = base + mul * pow(inc,2);
+		intensity = base + mul * pow(inc,2);
 	}else{
-		tc.a = max(base,(base + mul * sqrt(inc)));
+		intensity = max(base,(base + mul * pow(inc,2)));
 	}
 	
 		if(inc > 1){
 			add *= -1;
 		}else if(inc < 0){
 			twinkling = false;
+			intensity = base;
 		}
 		
-
-	
 		
 }
 
-void star::draw(){
+void star::drawBG(bool isAlpha){
 	
-	ofEnableAlphaBlending();
 	if(!isActive){
 		
 		ofFill();
-		ofSetColor(tc);
+		(isAlpha) ? ofSetColor(tc.r * intensity,tc.b * intensity, tc.g * intensity, alpha): ofSetColor(tc.r * intensity,tc.g * intensity,tc.b * intensity);
 		ofCircle(pos.x,pos.y, size);
-		
-	}else{
-		//ofNoFill();
-		//ofSetColor(tc);
-		//ofCircle(pos.x,pos.y, active_size);
-		drawActiveAlgorithm();
+
 	}
 	
-	ofDisableAlphaBlending();
-	ofSetColor(255);
 }
 
-void star::drawActiveAlgorithm(){
+void star::drawActiveAlgorithm(bool isAlpha){
 	
-	glPushMatrix();
-	glTranslatef(pos.x,pos.y ,0);
-	glScalef(active_size/100.0f,active_size/100.0f, 1);
-	
-	glPushMatrix();
-		ofSetRectMode(OF_RECTMODE_CENTER);
+	if(isActive){
+		
+		static ofRectangle rect;
 		static float rot = 0;
-		rot += 0.1;
-		glRotated(rot + ofRandom(-20,20), 0, 0, 1);
-		ofSetColor(ofRandom(200,255), ofRandom(200,255), ofRandom(200,255));
-		ofRect(ofRandom(-10,10), ofRandom(-10,10), ofRandom(50,200), ofRandom(50,200));
-		ofSetRectMode(OF_RECTMODE_CORNER);
-	glPopMatrix();
+		static float rot_add = 0;
+		static ofColor col = 0;
+		
+		if(!isAlpha){ // set statics only on 1st pass
+			rot_add =ofRandom(-20,20);
+			rect.set(ofRandom(-20,20), ofRandom(-20,20), ofRandom(50,200), ofRandom(50,200));
+			rot += 0.1;
+			col.set(ofRandom(200,255), ofRandom(200,255), ofRandom(200,255), 255);
+		}
+
+		glPushMatrix();
+		glTranslatef(pos.x,pos.y ,0);
+		glScalef(active_size/100.0f,active_size/100.0f, 1);
+		
+			glPushMatrix();
+				ofSetRectMode(OF_RECTMODE_CENTER);
+				glRotated(rot + rot_add, 0, 0, 1);
+				if(!isAlpha){
+					ofSetColor(0, 0, 0);
+					ofRect(rect.x,rect.y, rect.width + 10, rect.height + 10); // a slightly larger rect of black for blur
+					ofSetColor(col);
+				}else{
+					ofSetColor(col.r, col.g, col.b, 100);
+				}
+				ofRect(rect.x,rect.y,rect.width,rect.height);
+				ofSetRectMode(OF_RECTMODE_CORNER);
+			glPopMatrix();
+		
+		glPopMatrix();
+	}
 	
-	glPopMatrix();
 }
 
 star::~star(){

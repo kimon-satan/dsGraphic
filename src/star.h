@@ -13,6 +13,8 @@
 #include "ofMain.h" 
 #include "dsUser.h"
 
+
+
 class star{
 
 public:
@@ -23,8 +25,8 @@ public:
 	void update();
 	void findConflicts();
 	void findIsCovered();
-	void draw();
-	void drawActiveAlgorithm();
+	void drawBG(bool isAlpha);
+	void drawActiveAlgorithm(bool isAlpha);
 	void twinkle();
 	
 	float rotSpeed;
@@ -33,6 +35,7 @@ public:
 	float size;
 	float active_size;
 	float intensity;
+	float alpha;
 	float worldCircum;
 	int id;
 	bool twinkling;
@@ -43,7 +46,6 @@ public:
 	float base;
 	float add;
 	float inc;
-
 
 	ofColor tc;
 	vector<star*>* activeStarList;
