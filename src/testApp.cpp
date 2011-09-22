@@ -8,9 +8,7 @@ void testApp::setup(){
 	ofSetVerticalSync(true);
 	ofSetFrameRate(60);
 	outputMode = 1;
-	int rows = 30;
-	int columns = 40;
-	numStars = rows * columns;
+	int rows, cols;
 	showPoints = false;
 	
 	screenWidth = ofGetScreenWidth();
@@ -21,29 +19,49 @@ void testApp::setup(){
 	blurBG.setup(screenWidth, screenHeight);
 	blurFG.setup(screenWidth, screenHeight);
 	
-	ttf.loadFont("verdana.ttf", 70, true, true);
+	float h, s, offset;
+	rows = 10;
+	s = screenHeight/(rows * 2.8);
+	h =  s * sqrt(3.0f);
+	cols = screenWidth/h + 1;
+	offset = h/4.0f;
 	
-	int noise = 6;
+	int noise = 3;
 	int count = 0;
-	for(int i = 0; i < columns; i ++){ 
-		for(int j = 0; j < rows; j ++){ 
-			star newStar;
-			newStar.worldCircum = circum;
-			newStar.pos = ofVec2f(-circum/2 + (i+1) * circum/columns, -radius/2 + (j+1) * radius/rows);
-			ofVec2f displace(ofRandom(-noise,noise), ofRandom(-noise,noise));
-			newStar.pos += displace;
-			newStar.id = count;
-			newStar.activeStarList = &activeStarList;
-			stars.push_back(newStar);
-			count ++;
+	
+	
+	for(int i = 0; i < cols; i ++){
+		
+		for(int j = 0; j < rows; j ++){	
+			ofVec2f positions[4] = {
+				ofVec2f(i * h, j * s * 3),
+				ofVec2f(i * h, j * s * 3 + s),
+				ofVec2f(-h/2 + h * i, -offset + j * s * 3),
+				ofVec2f(-h/2 + h * i, -offset + j * s * 3 + s * 2)
+			};
+			
+			for(int k =0; k < 4; k ++){
+				star newStar;
+				newStar.worldCircum = circum;
+				newStar.pos = ofVec2f(positions[k].x - screenWidth/2, positions[k].y - screenHeight/2);
+				ofVec2f displace(ofRandom(-noise,noise), ofRandom(-noise,noise));
+				newStar.pos += displace;
+				newStar.id = count;
+				newStar.activeStarList = &activeStarList;
+				stars.push_back(newStar);
+				count ++;
+			}
 		} 
 	}
 	
+
 	for(int i =0; i < 20; i++)dsUsers[i].isActive = false;
 	
 	testIndex = 0;
 	distThresh = 1000;
 	testPoint = false;
+	bg.loadImage("moonTest.jpg");
+	
 	glDisable(GL_DEPTH_TEST); 
 	
 	
@@ -129,14 +147,14 @@ void testApp::update(){
 	
 	if(outputMode >= 2){
 		
-		for(int i = 0; i < numStars; i ++){
+		for(int i = 0; i < stars.size(); i ++){
 			
 			stars[i].update();
 			
 			if(!stars[i].twinkling){
 
 				float twink = ofRandom(0,1);
-				if(twink <= (float)1/(numStars)){
+				if(twink <= (float)1/(stars.size())){
 				stars[i].twinkle();
 					
 				} //should equal one every 2 secs
@@ -164,7 +182,7 @@ void testApp::pairPointsnStars(){
 				float dist = pow(distThresh,2);
 				int starId = -1;
 				
-				for(int j = 0; j < numStars; j++){
+				for(int j = 0; j < stars.size(); j++){
 					
 					if(!stars[j].isActive && !stars[j].isCovered){ 
 						float td = stars[j].pos.squareDistance(dsUsers[activeList[i]].pos); //brute force search for nearest star
@@ -274,6 +292,8 @@ void testApp::draw(){
 		
 		ofBackground(0);
 		
+		
+		
 		glPushMatrix();
 		glTranslatef(screenWidth/2,screenHeight/2,0);
 		for(int i = 0; i < stars.size(); i ++)stars[i].drawBG(false); 
@@ -305,6 +325,7 @@ void testApp::draw(){
 	}else if(outputMode == 3){
 		
 		
+		
 		blurBG.begin(1,2);
 		ofClear(0, 0, 0, 255); //black bg
 		glPushMatrix();
@@ -322,6 +343,12 @@ void testApp::draw(){
 		
 		ofSetColor(255);
 		blurBG.draw(); 
+		
+		ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+		float a = ofMap(mouseX, 0, screenWidth, 0, 100, false);
+		ofSetColor(230,255,230, a);
+		bg.draw(0,0,screenWidth,screenHeight);
+		ofDisableBlendMode();
 		
 		ofEnableBlendMode(OF_BLENDMODE_ADD);
 		glPushMatrix();
