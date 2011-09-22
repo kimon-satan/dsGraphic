@@ -14,19 +14,20 @@ void testApp::setup(){
 	screenWidth = ofGetScreenWidth();
 	screenHeight = ofGetScreenHeight();
 	radius = screenHeight;
-	circum = screenWidth;
+	circum = screenWidth * 1.25;
 	
 	blurBG.setup(screenWidth, screenHeight);
 	blurFG.setup(screenWidth, screenHeight);
 	
 	float h, s, offset;
-	rows = 11;
+	rows = 13;
 	s = screenHeight/(rows * 2.8);
 	h =  s * sqrt(3.0f);
-	cols = screenWidth/h + 1;
+	cols = circum/h;
 	offset = h/4.0f;
+
 	
-	int noise = 4;
+	int noise = 2;
 	int count = 0;
 	
 	
@@ -47,7 +48,7 @@ void testApp::setup(){
 				star newStar;
 				newStar.worldCircum = circum;
 				newStar.rotSpeed = -screenWidth/(pow(60.0f,2) * 2);
-				newStar.pos = ofVec2f(positions[k].x - screenWidth/2, positions[k].y - screenHeight/2);
+				newStar.pos = ofVec2f(positions[k].x - circum/2, positions[k].y - screenHeight/2);
 				ofVec2f displace(ofRandom(-noise,noise), ofRandom(-noise,noise));
 				newStar.pos += displace;
 				newStar.id = count;
@@ -62,6 +63,7 @@ void testApp::setup(){
 	}
 	
 	numStars = count;
+	columnWidth = circum/stars2d.size();
 
 	for(int i =0; i < 20; i++)dsUsers[i].isActive = false;
 	
@@ -172,7 +174,7 @@ void testApp::update(){
 		
 		static int msecs = 0;
 		static int currentCol = findColumn(-screenWidth/2);
-		static int timeInterval = (30000/stars2d.size()) * 0.75;
+		static int timeInterval = (30000/(screenWidth/columnWidth)) * 0.75; //0.75 is compensation for the back rotation of the stars
 		static int colCount = 0;
 		static int sleepTime = 30;
 			
@@ -198,7 +200,7 @@ void testApp::update(){
 				
 				int numCols = min(5, colCount);
 				
-				for(int i = 0; i < 1; i++){
+				for(int i = 0; i < numCols; i++){
 					int c = currentCol - i;
 					if(c < 0)c = c + stars2d.size(); //wrapping
 						for(int j = 0; j < stars2d[c].size(); j ++){
@@ -206,7 +208,7 @@ void testApp::update(){
 							if(!stars2d[c][j].twinkling){
 							 
 							  float twink = ofRandom(0,1);
-								if(twink <= (float)1/(5 * stars2d[c].size())) stars2d[c][j].twinkle();
+								if(twink <= (float)1/(15 * stars2d[c].size())) stars2d[c][j].twinkle(ofRandom(100,180));
 								
 							 } 
 						}
@@ -277,10 +279,9 @@ void testApp::manageStars(){
 
 int testApp::findColumn(float x){
 	
-	static float colwidth = screenWidth/stars2d.size();
 	float offsetX = x - stars2d[0][0].pos.x;
-	if(offsetX < 0){offsetX += screenWidth;}
-	int col  = offsetX/colwidth; 
+	if(offsetX < 0){offsetX += circum;}
+	int col  = offsetX/columnWidth; 
 	return col;
 }
 

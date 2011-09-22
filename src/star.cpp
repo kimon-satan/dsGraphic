@@ -53,6 +53,7 @@ void star::update(){
 			pos.x = worldCircum/2;
 		}
 		
+		(abs(pos.x) > ofGetScreenWidth()/2) ? onScreen = false : onScreen = true;
 		if(twinkling)twinkle();
 		findIsCovered();
 		
@@ -124,7 +125,7 @@ void star::findIsCovered(){
 	}
 }
 
-void star::twinkle(){
+void star::twinkle(int t_count){
 	 
 	mul = 1 - base;
 	
@@ -132,8 +133,7 @@ void star::twinkle(){
 		twinkling = true;
 		add = min(ofRandom(0.02,0.04), ofRandom(0.02,0.04));
 		inc = 0.01;
-		count = 0;
-		
+		count = t_count;
 	}
 	
 	
@@ -143,13 +143,11 @@ void star::twinkle(){
 		if(inc > 1){
 			add *= -1;	
 		}
-	}else if(count < 180){
-		count += 1;
-		if(id == 100){ cout << "cnt: "<< count << "\n";}
+	}else if(count > 0){
+		count -= 1;
 	}else{
 		inc += add;
 		intensity = max(base,(base + mul * pow(inc,2)));
-		if(id == 100){ cout << "int: " <<intensity << "\n";}
 		if(inc < 0){
 			twinkling = false;
 			intensity = base;
@@ -161,7 +159,7 @@ void star::twinkle(){
 
 void star::drawBG(bool isAlpha){
 	
-	if(!isActive){
+	if(!isActive && onScreen){
 		
 		ofFill();
 		(isAlpha) ? ofSetColor(tc.r * intensity,tc.b * intensity, tc.g * intensity, alpha): ofSetColor(tc.r * intensity,tc.g * intensity,tc.b * intensity);

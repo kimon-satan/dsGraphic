@@ -14,9 +14,9 @@
 		D90E9868142918DF00E5F7C8 /* ofxOscMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D90E9860142918DF00E5F7C8 /* ofxOscMessage.cpp */; };
 		D90E9869142918DF00E5F7C8 /* ofxOscReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D90E9862142918DF00E5F7C8 /* ofxOscReceiver.cpp */; };
 		D90E986A142918DF00E5F7C8 /* ofxOscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D90E9864142918DF00E5F7C8 /* ofxOscSender.cpp */; };
-		D91B1987142A3CF300FBE6D2 /* testApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D91B1982142A3CF300FBE6D2 /* testApp.cpp */; };
 		D91B1988142A3CF300FBE6D2 /* star.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D91B1984142A3CF300FBE6D2 /* star.cpp */; };
 		D91B1989142A3CF300FBE6D2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D91B1985142A3CF300FBE6D2 /* main.cpp */; };
+		D9E90BE5142BC2FD00F63805 /* testApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9E90BE4142BC2FD00F63805 /* testApp.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -93,11 +93,11 @@
 		D90E9864142918DF00E5F7C8 /* ofxOscSender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxOscSender.cpp; path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxOsc/src/ofxOscSender.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D90E9865142918DF00E5F7C8 /* ofxOscSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxOscSender.h; path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxOsc/src/ofxOscSender.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1981142A3CF300FBE6D2 /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = testApp.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/testApp.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
-		D91B1982142A3CF300FBE6D2 /* testApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = testApp.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/testApp.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1983142A3CF300FBE6D2 /* star.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = star.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/star.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1984142A3CF300FBE6D2 /* star.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = star.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/star.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1985142A3CF300FBE6D2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/main.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1986142A3CF300FBE6D2 /* dsUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dsUser.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/dsUser.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D9E90BE4142BC2FD00F63805 /* testApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = testApp.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/testApp.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -327,8 +327,8 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				D9E90BE4142BC2FD00F63805 /* testApp.cpp */,
 				D91B1981142A3CF300FBE6D2 /* testApp.h */,
-				D91B1982142A3CF300FBE6D2 /* testApp.cpp */,
 				D91B1983142A3CF300FBE6D2 /* star.h */,
 				D91B1984142A3CF300FBE6D2 /* star.cpp */,
 				D91B1985142A3CF300FBE6D2 /* main.cpp */,
@@ -435,9 +435,9 @@
 				D90E9868142918DF00E5F7C8 /* ofxOscMessage.cpp in Sources */,
 				D90E9869142918DF00E5F7C8 /* ofxOscReceiver.cpp in Sources */,
 				D90E986A142918DF00E5F7C8 /* ofxOscSender.cpp in Sources */,
-				D91B1987142A3CF300FBE6D2 /* testApp.cpp in Sources */,
 				D91B1988142A3CF300FBE6D2 /* star.cpp in Sources */,
 				D91B1989142A3CF300FBE6D2 /* main.cpp in Sources */,
+				D9E90BE5142BC2FD00F63805 /* testApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

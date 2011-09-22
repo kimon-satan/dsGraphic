@@ -36,7 +36,7 @@ private:
 	ofTrueTypeFont ttf;
 	ofImage bg;
 	
-	float screenWidth, screenHeight;
+	float screenWidth, screenHeight, columnWidth;
 	ofxBlurShader blurBG;
 	ofxBlurShader blurFG;
 	vector <int> activeList;

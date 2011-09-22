@@ -73,7 +73,7 @@ public:
 	void findIsCovered();
 	void drawBG(bool isAlpha);
 	void drawActiveAlgorithm(bool isAlpha);
-	void twinkle();
+	void twinkle(int t_count = 0);
 	
 	float rotSpeed;
 	ofVec2f rot_axis;
@@ -85,6 +85,7 @@ public:
 	float worldCircum;
 	int id;
 	bool twinkling;
+	bool onScreen;
 	
 	dsUser * pairedUser;
 	bool isActive;
