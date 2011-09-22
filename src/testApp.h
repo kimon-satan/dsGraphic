@@ -30,6 +30,8 @@ public:
 	void exit();
 
 private:
+	
+	int findColumn(float x);
 	ofxOscReceiver	receiver;
 	ofTrueTypeFont ttf;
 	ofImage bg;
@@ -44,6 +46,7 @@ private:
 	int calibStage, calibCount;
 	
 	vector<star> stars;
+	vector< vector<star> > stars2d;
 	vector<star *> activeStarList;
 	int numStars;
 	double distThresh;
