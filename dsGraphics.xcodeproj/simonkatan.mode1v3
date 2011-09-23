@@ -347,16 +347,16 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>D9C81591142BCE79005C1E48</string>
+										<string>D9AD177D142D0CA5003E644B</string>
 										<key>history</key>
 										<array>
 											<string>D90E995214292E7800E5F7C8</string>
 											<string>D9133F4B142B7C580078CC3C</string>
 											<string>D9134105142BAAEF0078CC3C</string>
 											<string>D9E90C2B142BCC4500F63805</string>
-											<string>D9E90C2D142BCC4500F63805</string>
-											<string>D9E90C3E142BCDB000F63805</string>
-											<string>D9E90C43142BCE5400F63805</string>
+											<string>D9AFDDB8142CFA0500350895</string>
+											<string>D9AFDDF5142CFDA300350895</string>
+											<string>D9AD1738142D01E5003E644B</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -368,14 +368,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {1072, 396}}</string>
+								<string>{{0, 0}, {1072, 330}}</string>
 								<key>RubberWindowFrame</key>
 								<string>0 59 1280 719 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>396pt</string>
+							<string>330pt</string>
 						</dict>
 						<dict>
 							<key>ContentConfiguration</key>
@@ -388,14 +388,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 401}, {1072, 277}}</string>
+								<string>{{0, 335}, {1072, 343}}</string>
 								<key>RubberWindowFrame</key>
 								<string>0 59 1280 719 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
 							<key>Proportion</key>
-							<string>277pt</string>
+							<string>343pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>
@@ -414,9 +414,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>D9C81592142BCE79005C1E48</string>
+				<string>D9AD1753142D0206003E644B</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>D9C81593142BCE79005C1E48</string>
+				<string>D9AD1754142D0206003E644B</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -537,7 +537,7 @@
 	<key>StatusbarIsVisible</key>
 	<true/>
 	<key>TimeStamp</key>
-	<real>338415225.131208</real>
+	<real>338496677.17994899</real>
 	<key>ToolbarConfigUserDefaultsMinorVersion</key>
 	<string>2</string>
 	<key>ToolbarDisplayMode</key>
@@ -554,7 +554,11 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>D9AD1757142D0206003E644B</string>
+		<string>D9AD1758142D0206003E644B</string>
+		<string>1C78EAAD065D492600B07095</string>
 		<string>D90E97811429138A00E5F7C8</string>
+		<string>1CD10A99069EF8BA00B06720</string>
 		<string>/Developer/Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/dsGraphics.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -596,6 +600,8 @@
 							<string>280pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -635,7 +641,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>D90E97811429138A00E5F7C8</string>
-				<string>D9C81594142BCE79005C1E48</string>
+				<string>D9AD174B142D0204003E644B</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -722,11 +728,11 @@
 									<key>DebugVariablesTableConfiguration</key>
 									<array>
 										<string>Name</string>
-										<real>120</real>
+										<real>245</real>
 										<string>Value</string>
 										<real>85</real>
 										<string>Summary</string>
-										<real>466</real>
+										<real>341</real>
 									</array>
 									<key>Frame</key>
 									<string>{{584, 0}, {696, 361}}</string>
@@ -757,13 +763,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>D9E90BDB142BC21900F63805</string>
+				<string>D9AD174C142D0204003E644B</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>D9E90BDC142BC21900F63805</string>
-				<string>D9E90BDD142BC21900F63805</string>
-				<string>D9E90BDE142BC21900F63805</string>
-				<string>D9E90BDF142BC21900F63805</string>
-				<string>D9E90BE0142BC21900F63805</string>
+				<string>D9AD174D142D0204003E644B</string>
+				<string>D9AD174E142D0204003E644B</string>
+				<string>D9AD174F142D0204003E644B</string>
+				<string>D9AD1750142D0204003E644B</string>
+				<string>D9AD1751142D0204003E644B</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -772,7 +778,7 @@
 			<key>WindowToolGUID</key>
 			<string>1CD10A99069EF8BA00B06720</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
@@ -917,7 +923,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>D9E90BE1142BC21900F63805</string>
+				<string>D9AD1755142D0206003E644B</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>

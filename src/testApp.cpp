@@ -3,9 +3,16 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
-	ofSetCircleResolution(50);
+	ofSetCircleResolution(20);
+	
 	receiver.setup( PORT );
-	ofSetVerticalSync(true);
+	sender.setup(HOST, SCPORT);
+	
+	ofxOscMessage m;
+	m.setAddress("/init");
+	sender.sendMessage(m);
+	
+	ofSetVerticalSync(false);
 	ofSetFrameRate(60);
 	outputMode = 1;
 	int rows, cols;
@@ -20,16 +27,15 @@ void testApp::setup(){
 	blurFG.setup(screenWidth, screenHeight);
 	
 	float h, s, offset;
-	rows = 13;
+	rows = 16;
 	s = screenHeight/(rows * 2.8);
 	h =  s * sqrt(3.0f);
 	cols = circum/h;
 	offset = h/4.0f;
-
+	bg_alpha = 25;
 	
 	int noise = 2;
 	int count = 0;
-	
 	
 	for(int i = 0; i < cols; i ++){
 		
@@ -157,71 +163,179 @@ void testApp::update(){
 	
 	if(outputMode >= 2){
 		
-		for(int i = 0; i < stars2d.size(); i ++){
-			for(int j = 0; j < stars2d[i].size(); j ++){
-			
-			stars2d[i][j].update();
-			
-			/*if(!stars2d[i][j].twinkling){
+		manageStars();
+		pairPointsnStars();
+		
+	}
+	
+}
 
-				float twink = ofRandom(0,1);
-				if(twink <= (float)1/numStars)stars2d[i][j].twinkle();
+
+
+void testApp::manageStars(){
+	
+	
+	//first tidy up the active stars
+		
+	for(int i = 0; i < activeStarList.size(); i ++){
+		
+		if(!activeStarList[i]->isActive)activeStarList.erase(activeStarList.begin() + i);
+		
+	} 
+	
+	//then call update on all stars
+	for(int i = 0; i < stars2d.size(); i ++){
+		for(int j = 0; j < stars2d[i].size(); j ++)stars2d[i][j].update(); 
+	}
+	
+	
+	//now handle star lighting
+	
+	
+/* for(int i = 0; i < stars2d.size(); i ++){  //random twickling ...maybe iterative is not necessary 
+		for(int j = 0; j < stars2d[i].size(); j ++){
+			
+			if(!stars2d[i][j].twinkling){
+			 
+			 float twink = ofRandom(0,1);
+			 if(twink <= (float)1/numStars)stars2d[i][j].twinkle();
+			 
+			 } 
+			
+		} 
+	}*/
+
+	//time counting wave  of stars
+	
+	int waveWidth = 8;
+	static int msecs = 0;
+	static int currentCol = findColumn(-screenWidth/2);
+	static int timeInterval = (30000/((screenWidth + ((waveWidth-1) * columnWidth))/columnWidth)) * 0.75; //0.75 is compensation for the back rotation of the stars
+	static int colCount = 0;
+	static int sleepTime = 0;
+	
+	if(sleepTime < 30 & ofGetElapsedTimeMillis() > msecs){
+		
+		manageWhomps(sleepTime);
+		sleepTime += 1;
+		msecs = ofGetElapsedTimeMillis() + 1000;
+		
+		if(sleepTime == 30){
+			ofxOscMessage m; //tell superCollider to begin wave
+			m.setAddress("/wave");
+			sender.sendMessage(m);
+		}
+		
+	}else if(sleepTime == 30 && ofGetElapsedTimeMillis() > msecs){	
+		
+		if(colCount == 0){ //start of wave
+			currentCol = findColumn(-screenWidth/2); //find the first column
+		}
+		
+		msecs = ofGetElapsedTimeMillis() + timeInterval;
+		currentCol = (currentCol + 1)%stars2d.size();
+		colCount += 1;
+		
+		if(colCount == stars2d.size()){
+			colCount = 0;
+			sleepTime = 0;
+			msecs = ofGetElapsedTimeMillis() + 1000;
+		}
+		
+	}else if(colCount > 0){
+		
+		int numCols = min(waveWidth, colCount);
+		
+		for(int i = 0; i < numCols; i++){
+			int c = currentCol - i;
+			if(c < 0)c = c + stars2d.size(); //wrapping
+			for(int j = 0; j < stars2d[c].size(); j ++){
+				
+				if(!stars2d[c][j].twinkling){
 					
-				} //should equal one every 2 secs */
+					float twink = ofRandom(0,1);
+					if(twink <= (float)1/(10 * stars2d[c].size())) stars2d[c][j].twinkle(ofRandom(100,220));
+					
+				} 
+			}
+			
+		}
+		
+		
+	}else{manageWhomps();}
+	
+
+}
+
+int testApp::findColumn(float x){
+	
+	float offsetX = x - stars2d[0][0].pos.x;
+	if(offsetX < 0){offsetX += circum;}
+	int col  = offsetX/columnWidth; 
+	return col;
+}
+
+void testApp::manageWhomps(int sleepCount){
+	
+	static float inc;
+	
+	if(sleepCount >= 0){
+	
+		if(sleepCount == 0){ //start new series of whomps
+			
+			inc = 0;
+			intensity =0;
+			whomps.clear();
+			int numWhomps = ofRandom(1,3);
+			
+			for(int i = 0; i < numWhomps; i++){
+				float interval = (float)30.0f/(numWhomps + 1);
+				whomp t;
+				t.count = interval * (i+1); //evenly spread the whomps
+				t.length = 2;
+				whomps.push_back(t);
+			}
+			
+		}else if(whomps.size() > 0){
+		
+			if(whomps[0].count == sleepCount){
+				
+				ofxOscMessage m;
+				m.setAddress("/whomp");
+				m.addFloatArg(whomps[0].length);
+				sender.sendMessage(m);
+				
+				intensity = 0;
+				inc = 180/(whomps[0].length * 0.5 * ofGetFrameRate());
+				
+				//start new whomp
+				
 			}
 		
 		}
 		
-		static int msecs = 0;
-		static int currentCol = findColumn(-screenWidth/2);
-		static int timeInterval = (30000/(screenWidth/columnWidth)) * 0.75; //0.75 is compensation for the back rotation of the stars
-		static int colCount = 0;
-		static int sleepTime = 30;
+	}else{
+	
+		//update alpha
+		
+		if(intensity > 180){
+			bg_alpha = 25;
+			inc = 0;
+			intensity = 0;
+			whomps.erase(whomps.begin());
+		}else if(inc > 0 && intensity < 90){
+			intensity += inc/2;
+			float add = 25 + 20.0f * sin(ofDegToRad(intensity));
+			bg_alpha = add;
 			
-			if(sleepTime < 30 & ofGetElapsedTimeMillis() > msecs){
-				
-				sleepTime += 1;
-				msecs = ofGetElapsedTimeMillis() + 1000;
-		
-			}else if(sleepTime == 30 && ofGetElapsedTimeMillis() > msecs){	
-				if(colCount == 0){
-					currentCol = findColumn(-screenWidth/2);
-				}
-				msecs = ofGetElapsedTimeMillis() + timeInterval;
-				currentCol = (currentCol + 1)%stars2d.size();
-				colCount += 1;
-				if(colCount == stars2d.size()){
-					colCount = 0;
-					sleepTime = 0;
-					msecs = ofGetElapsedTimeMillis() + 1000;
-				}
-				
-			}else if(colCount > 0){
-				
-				int numCols = min(5, colCount);
-				
-				for(int i = 0; i < numCols; i++){
-					int c = currentCol - i;
-					if(c < 0)c = c + stars2d.size(); //wrapping
-						for(int j = 0; j < stars2d[c].size(); j ++){
-					
-							if(!stars2d[c][j].twinkling){
-							 
-							  float twink = ofRandom(0,1);
-								if(twink <= (float)1/(15 * stars2d[c].size())) stars2d[c][j].twinkle(ofRandom(100,180));
-								
-							 } 
-						}
-					
-				}
-				
-			}
-		
-		manageStars();
-		pairPointsnStars();
-		
+		}else if(intensity >= 90){
+			intensity += inc/2;
+			float add = 25 + 20.0f * sin(ofDegToRad(intensity));
+			bg_alpha = add;			
+		}
 		
 	}
+	
 	
 }
 
@@ -264,26 +378,6 @@ void testApp::pairPointsnStars(){
 	}
 }
 
-void testApp::manageStars(){
-	
-	//first tidy up the active stars
-		
-	for(int i = 0; i < activeStarList.size(); i ++){
-		
-		if(!activeStarList[i]->isActive)activeStarList.erase(activeStarList.begin() + i);
-		
-	} 
-	
-
-}
-
-int testApp::findColumn(float x){
-	
-	float offsetX = x - stars2d[0][0].pos.x;
-	if(offsetX < 0){offsetX += circum;}
-	int col  = offsetX/columnWidth; 
-	return col;
-}
 
 //--------------------------------------------------------------
 void testApp::draw(){
@@ -430,8 +524,7 @@ void testApp::draw(){
 		blurBG.draw(); 
 		
 		ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-		float a = ofMap(mouseX, 0, screenWidth, 0, 100, false);
-		ofSetColor(230,255,230, a);
+		ofSetColor(230,255,230, bg_alpha);
 		bg.draw(0,0,screenWidth,screenHeight);
 		ofDisableBlendMode();
 		
