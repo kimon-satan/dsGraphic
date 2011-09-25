@@ -134,7 +134,7 @@
 	};
 	D99F43CF142F73CE00FE5020 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = D9F4E132142F417D00047A3F /* randomRect.h */;
+		fRef = D9F4E132142F417D00047A3F /* starAlgs */;
 		name = "randomRect.h: 42";
 		rLen = 0;
 		rLoc = 622;
@@ -184,7 +184,7 @@
 	};
 	D99F43FF142F767400FE5020 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = D9F4E132142F417D00047A3F /* randomRect.h */;
+		fRef = D9F4E132142F417D00047A3F /* starAlgs */;
 		name = "randomRect.h: 42";
 		rLen = 0;
 		rLoc = 622;
@@ -194,7 +194,7 @@
 	};
 	D9A9CC4C142F8D3D00AC031C /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = D9F4E132142F417D00047A3F /* randomRect.h */;
+		fRef = D9F4E132142F417D00047A3F /* starAlgs */;
 		name = "randomRect.h: 42";
 		rLen = 0;
 		rLoc = 622;
@@ -204,7 +204,7 @@
 	};
 	D9A9CC4D142F8D3D00AC031C /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = D9F4E132142F417D00047A3F /* randomRect.h */;
+		fRef = D9F4E132142F417D00047A3F /* starAlgs */;
 		name = "randomRect.h: 42";
 		rLen = 0;
 		rLoc = 622;
@@ -226,7 +226,13 @@
 			sepNavVisRange = "{237, 174}";
 		};
 	};
-	D9F4E132142F417D00047A3F /* randomRect.h */ = {
+	D9F4E132142F417D00047A3F /* starAlgs */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = folder;
+		name = starAlgs;
+		path = /Developer/Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1011, 1170}}";
 			sepNavSelRange = "{622, 0}";
@@ -235,7 +241,7 @@
 	};
 	D9F4E133142F440000047A3F /* starIncludes.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1011, 547}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 570}}";
 			sepNavSelRange = "{163, 0}";
 			sepNavVisRange = "{0, 206}";
 		};

@@ -97,9 +97,9 @@
 		D91B1984142A3CF300FBE6D2 /* star.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = star.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/star.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1985142A3CF300FBE6D2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/main.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1986142A3CF300FBE6D2 /* dsUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dsUser.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/dsUser.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D9A9CC54142F8E0500AC031C /* randomRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = randomRect.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/randomRect.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9E90BE4142BC2FD00F63805 /* testApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = testApp.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/testApp.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9F4E12C142F3EC700047A3F /* activeStarBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = activeStarBase.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/activeStarBase.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
-		D9F4E132142F417D00047A3F /* randomRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = randomRect.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/randomRect.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9F4E133142F440000047A3F /* starIncludes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = starIncludes.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starIncludes.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -299,7 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				D9F4E12C142F3EC700047A3F /* activeStarBase.h */,
-				D9F4E132142F417D00047A3F /* randomRect.h */,
+				D9A9CC54142F8E0500AC031C /* randomRect.h */,
 				D9F4E133142F440000047A3F /* starIncludes.h */,
 			);
 			name = activeStarClasses;
