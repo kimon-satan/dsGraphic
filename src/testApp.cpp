@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
-	ofSetCircleResolution(20);
+//	ofSetCircleResolution(20);
 	
 	receiver.setup( PORT );
 	sender.setup(HOST, SCPORT);
@@ -12,7 +12,7 @@ void testApp::setup(){
 	m.setAddress("/init");
 	sender.sendMessage(m);
 	
-	ofSetVerticalSync(false);
+	ofSetVerticalSync(true);
 	ofSetFrameRate(60);
 	outputMode = 1;
 	int rows, cols;
@@ -32,15 +32,15 @@ void testApp::setup(){
 	h =  s * sqrt(3.0f);
 	cols = circum/h;
 	offset = h/4.0f;
-	bg_alpha = 25;
+	bg_alpha = 45;
 	
 	int noise = 2;
 	int count = 0;
 	
 	for(int i = 0; i < cols; i ++){
 		
-		vector<star> s1;
-		vector<star> s0;
+		vector<star *> s1;
+		vector<star *> s0;
 		
 		for(int j = 0; j < rows; j ++){	
 			ofVec2f positions[4] = {
@@ -51,15 +51,22 @@ void testApp::setup(){
 			};
 			
 			for(int k =0; k < 4; k ++){
-				star newStar;
-				newStar.worldCircum = circum;
-				newStar.rotSpeed = -screenWidth/(pow(60.0f,2) * 2);
-				newStar.pos = ofVec2f(positions[k].x - circum/2, positions[k].y - screenHeight/2);
+				star * newStar = new star();
+				newStar->worldCircum = circum;
+				newStar->rotSpeed = -screenWidth/(pow(60.0f,2) * 2);
+				newStar->pos = ofVec2f(positions[k].x - circum/2, positions[k].y - screenHeight/2);
 				ofVec2f displace(ofRandom(-noise,noise), ofRandom(-noise,noise));
-				newStar.pos += displace;
-				newStar.id = count;
-				newStar.activeStarList = &activeStarList;
-				(k < 2) ? s0.push_back(newStar): s1.push_back(newStar);
+				newStar->pos += displace;
+				newStar->id = count;
+				
+				newStar->activeStarList = &activeStarList;
+				if(k < 2){  
+					newStar->col = i * 2;
+					s0.push_back(newStar);
+				}else{ 
+					newStar->col = i * 2 + 1;
+					s1.push_back(newStar);
+				}
 				count ++;
 			}
 		}
@@ -74,7 +81,7 @@ void testApp::setup(){
 	for(int i =0; i < 20; i++)dsUsers[i].isActive = false;
 	
 	testIndex = 0;
-	distThresh = 1000;
+	distThresh = 200;
 	testPoint = false;
 	bg.loadImage("moonTest.jpg");
 	
@@ -163,8 +170,8 @@ void testApp::update(){
 	
 	if(outputMode >= 2){
 		
-		manageStars();
 		pairPointsnStars();
+		manageStars();
 		
 	}
 	
@@ -179,13 +186,27 @@ void testApp::manageStars(){
 		
 	for(int i = 0; i < activeStarList.size(); i ++){
 		
-		if(!activeStarList[i]->isActive)activeStarList.erase(activeStarList.begin() + i);
+		if(!activeStarList[i]->isActive){
+			int col = findColumn(activeStarList[i]->pos.x);
+			stars2d[col].push_back(activeStarList[i]); // put a star pointer into the relevant column
+			activeStarList[i]->col = col;
+			activeStarList[i]->twinkle(20);
+			activeStarList.erase(activeStarList.begin() + i);
 		
+		
+		}		
 	} 
 	
 	//then call update on all stars
 	for(int i = 0; i < stars2d.size(); i ++){
-		for(int j = 0; j < stars2d[i].size(); j ++)stars2d[i][j].update(); 
+		for(int j = 0; j < stars2d[i].size(); j ++){
+			if(stars2d[i][j]->col != i ){
+				stars2d[i].erase(stars2d[i].begin() + j); //delete old references
+				j -= 1;
+			}else{
+				stars2d[i][j]->update(); 
+			}
+		}
 	}
 	
 	
@@ -195,10 +216,10 @@ void testApp::manageStars(){
 /* for(int i = 0; i < stars2d.size(); i ++){  //random twickling ...maybe iterative is not necessary 
 		for(int j = 0; j < stars2d[i].size(); j ++){
 			
-			if(!stars2d[i][j].twinkling){
+			if(!stars2d[i][j]->twinkling){
 			 
 			 float twink = ofRandom(0,1);
-			 if(twink <= (float)1/numStars)stars2d[i][j].twinkle();
+			 if(twink <= (float)1/numStars)stars2d[i][j]->twinkle();
 			 
 			 } 
 			
@@ -212,11 +233,11 @@ void testApp::manageStars(){
 	static int currentCol = findColumn(-screenWidth/2);
 	static int timeInterval = (30000/((screenWidth + ((waveWidth-1) * columnWidth))/columnWidth)) * 0.75; //0.75 is compensation for the back rotation of the stars
 	static int colCount = 0;
-	static int sleepTime = 0;
+	static int sleepTime = 27;
 	
 	if(sleepTime < 30 & ofGetElapsedTimeMillis() > msecs){
 		
-		manageWhomps(sleepTime);
+		//manageWhomps(sleepTime);
 		sleepTime += 1;
 		msecs = ofGetElapsedTimeMillis() + 1000;
 		
@@ -251,10 +272,18 @@ void testApp::manageStars(){
 			if(c < 0)c = c + stars2d.size(); //wrapping
 			for(int j = 0; j < stars2d[c].size(); j ++){
 				
-				if(!stars2d[c][j].twinkling){
+				if(!stars2d[c][j]->twinkling){
 					
 					float twink = ofRandom(0,1);
-					if(twink <= (float)1/(10 * stars2d[c].size())) stars2d[c][j].twinkle(ofRandom(100,220));
+					if(twink <= (float)1/(10 * stars2d[c].size())){
+						stars2d[c][j]->twinkle(ofRandom(100,220));
+						ofxOscMessage m;
+						m.setAddress("/twinkle");
+						m.addFloatArg(stars2d[c][j]->pos.x/screenWidth);
+						m.addFloatArg(stars2d[c][j]->pos.y/screenHeight + 0.5);
+						sender.sendMessage(m);
+						
+					}
 					
 				} 
 			}
@@ -262,14 +291,15 @@ void testApp::manageStars(){
 		}
 		
 		
-	}else{manageWhomps();}
+	}
+	//else{manageWhomps();}
 	
 
 }
 
 int testApp::findColumn(float x){
 	
-	float offsetX = x - stars2d[0][0].pos.x;
+	float offsetX = x - stars2d[0][0]->pos.x;
 	if(offsetX < 0){offsetX += circum;}
 	int col  = offsetX/columnWidth; 
 	return col;
@@ -353,13 +383,15 @@ void testApp::pairPointsnStars(){
 				
 				int col = findColumn(dsUsers[activeList[i]].pos.x );
 				
-				for(int j =0; j < stars2d[col].size(); j++){
-					if(!stars2d[col][j].isActive && !stars2d[col][j].isCovered){ 
-						float td = stars2d[col][j].pos.squareDistance(dsUsers[activeList[i]].pos); //brute force search for nearest star
-						if(td < dist){
-							st_pnt = &stars2d[col][j]; 
-							dist = td;
-						}										//maybe optimise with a look up table.
+				for(int k = 0; k < 3; k++){
+					for(int j =0; j < stars2d[col - 1 + k].size(); j++){
+						if(!stars2d[col - 1 + k][j]->isActive && !stars2d[col - 1 + k][j]->isCovered && stars2d[col - 1 + k][j]->intensity > 0){ 
+							float td = stars2d[col - 1 + k][j]->pos.squareDistance(dsUsers[activeList[i]].pos); //brute force search for nearest star
+							if(td < dist){
+								st_pnt = stars2d[col - 1 + k][j]; 
+								dist = td;
+							}										//maybe optimise with a look up table.
+						}
 					}
 				}
 				
@@ -457,13 +489,13 @@ void testApp::draw(){
 		glTranslatef(screenWidth/2,screenHeight/2,0);
 		for(int i = 0; i < stars2d.size(); i ++){ 
 			for(int j = 0; j < stars2d[i].size(); j ++){ 
-			stars2d[i][j].drawBG(false);
+			stars2d[i][j]->drawBG(false);
 			}
 		}
 		
 		for(int i = 0; i < stars2d.size(); i ++){ 
 			for(int j = 0; j < stars2d[i].size(); j ++){ 
-				stars2d[i][j].drawActiveAlgorithm(false); 
+				stars2d[i][j]->drawActiveAlgorithm(false); 
 			}
 		}
 		
@@ -500,7 +532,7 @@ void testApp::draw(){
 		glTranslatef(screenWidth/2, screenHeight/2, 0);
 		for(int i = 0; i < stars2d.size(); i ++){ 
 			for(int j = 0; j < stars2d[i].size(); j ++){ 
-			stars2d[i][j].drawBG(false);
+			stars2d[i][j]->drawBG(false);
 			}
 		}
 		
@@ -513,7 +545,7 @@ void testApp::draw(){
 		glTranslatef(screenWidth/2, screenHeight/2, 0);
 		for(int i = 0; i < stars2d.size(); i ++){ 
 			for(int j = 0; j < stars2d[i].size(); j ++){ 
-				stars2d[i][j].drawActiveAlgorithm(false); 
+				stars2d[i][j]->drawActiveAlgorithm(false); 
 			}
 		}
 		
@@ -534,7 +566,7 @@ void testApp::draw(){
 		
 		for(int i = 0; i < stars2d.size(); i ++){ 
 			for(int j = 0; j < stars2d[i].size(); j ++){ 
-				stars2d[i][j].drawBG(true);
+				stars2d[i][j]->drawBG(true);
 			}
 		}
 		
@@ -552,7 +584,7 @@ void testApp::draw(){
 		glTranslatef(screenWidth/2, screenHeight/2, 0);
 		for(int i = 0; i < stars2d.size(); i ++){ 
 			for(int j = 0; j < stars2d[i].size(); j ++){ 
-				stars2d[i][j].drawActiveAlgorithm(true); 
+				stars2d[i][j]->drawActiveAlgorithm(true); 
 			}
 		}
 		glPopMatrix();
@@ -576,8 +608,8 @@ void testApp::keyPressed  (int key){
 	if(key == 'm')outputMode += 1; outputMode = outputMode%4;
 	if(key == 's')showPoints = !showPoints;
 	if(key == 't')testPoint = true;
+	if(key == 'q')dsUsers[activeList[0]].isMoving = !dsUsers[activeList[0]].isMoving;
 	if(key == '+')testIndex = (testIndex +1)%3;
-	if(key == 'd'){stars2d[10][5].twinkle();}
 	
 }
 
@@ -588,7 +620,10 @@ void testApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
-	
+
+	if(activeList.size() > 0){
+		dsUsers[activeList[0]].pos.set(x - screenWidth/2, y - screenHeight/2);
+	}
 }
 
 //--------------------------------------------------------------
@@ -642,5 +677,10 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 void testApp::exit(){
 
 cout << "exit \n";
+	
+	for(int i = 0; i < stars2d.size(); i ++){
+		for(int j = 0; j < stars2d[i].size(); j ++)delete stars2d[i][j]; 
+	}
+	
 	
 }

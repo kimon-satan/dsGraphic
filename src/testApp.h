@@ -61,7 +61,7 @@ private:
 	int outputMode;
 	int calibStage, calibCount;
 	
-	vector< vector<star> > stars2d;
+	vector< vector<star *> > stars2d;
 	vector<star *> activeStarList;
 	vector <whomp> whomps;
 	
