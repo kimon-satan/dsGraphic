@@ -17,9 +17,11 @@ public:
 	
 	ofVec2f pos;
 	float size, max_size;
-	bool isMove;
+	string starName;
+	int eventTime, eventPolarity;
+	bool newEvent;
 	
-	virtual void update(float size, ofVec2f pos, bool isMove){
+	virtual void update(float size, ofVec2f pos){
 	
 	}
 	

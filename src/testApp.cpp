@@ -58,6 +58,7 @@ void testApp::setup(){
 				ofVec2f displace(ofRandom(-noise,noise), ofRandom(-noise,noise));
 				newStar->pos += displace;
 				newStar->id = count;
+
 				
 				newStar->activeStarList = &activeStarList;
 				if(k < 2){  
@@ -190,9 +191,17 @@ void testApp::manageStars(){
 			int col = findColumn(activeStarList[i]->pos.x);
 			stars2d[col].push_back(activeStarList[i]); // put a star pointer into the relevant column
 			activeStarList[i]->col = col;
-			activeStarList[i]->twinkle(20);
+			activeStarList[i]->twinkle(5);
 			activeStarList.erase(activeStarList.begin() + i);
-		
+			
+			ofxOscMessage m;
+			m.setAddress("/endStar");
+			m.addIntArg(activeStarList[i]->id);
+			sender.sendMessage(m);
+			
+			activeStarList[i]->pairedUser = NULL; // now get rid of the pairedUser
+			
+			
 		
 		}		
 	} 
@@ -202,9 +211,22 @@ void testApp::manageStars(){
 		for(int j = 0; j < stars2d[i].size(); j ++){
 			if(stars2d[i][j]->col != i ){
 				stars2d[i].erase(stars2d[i].begin() + j); //delete old references
-				j -= 1;
+				j -= 1;//does this work ?
 			}else{
 				stars2d[i][j]->update(); 
+				
+				if(stars2d[i][j]->isActive){
+				
+					float a = stars2d[i][j]->active_size/stars2d[i][j]->max_size; //there could ultimately be different max_sizes
+					ofxOscMessage m;
+					m.setAddress("/updateStar");
+					m.addIntArg(stars2d[i][j]->id);
+					m.addFloatArg(a); // normalised value for size;
+					m.addIntArg(stars2d[i][j]->activeStar->newEvent);
+					m.addIntArg(stars2d[i][j]->activeStar->eventTime);
+					m.addIntArg(stars2d[i][j]->activeStar->eventPolarity);
+					sender.sendMessage(m);
+				}
 			}
 		}
 	}
@@ -237,7 +259,6 @@ void testApp::manageStars(){
 	
 	if(sleepTime < 30 & ofGetElapsedTimeMillis() > msecs){
 		
-		//manageWhomps(sleepTime);
 		sleepTime += 1;
 		msecs = ofGetElapsedTimeMillis() + 1000;
 		
@@ -292,7 +313,7 @@ void testApp::manageStars(){
 		
 		
 	}
-	//else{manageWhomps();}
+
 	
 
 }
@@ -305,69 +326,6 @@ int testApp::findColumn(float x){
 	return col;
 }
 
-void testApp::manageWhomps(int sleepCount){
-	
-	static float inc;
-	
-	if(sleepCount >= 0){
-	
-		if(sleepCount == 0){ //start new series of whomps
-			
-			inc = 0;
-			intensity =0;
-			whomps.clear();
-			int numWhomps = ofRandom(1,3);
-			
-			for(int i = 0; i < numWhomps; i++){
-				float interval = (float)30.0f/(numWhomps + 1);
-				whomp t;
-				t.count = interval * (i+1); //evenly spread the whomps
-				t.length = 2;
-				whomps.push_back(t);
-			}
-			
-		}else if(whomps.size() > 0){
-		
-			if(whomps[0].count == sleepCount){
-				
-				ofxOscMessage m;
-				m.setAddress("/whomp");
-				m.addFloatArg(whomps[0].length);
-				sender.sendMessage(m);
-				
-				intensity = 0;
-				inc = 180/(whomps[0].length * 0.5 * ofGetFrameRate());
-				
-				//start new whomp
-				
-			}
-		
-		}
-		
-	}else{
-	
-		//update alpha
-		
-		if(intensity > 180){
-			bg_alpha = 25;
-			inc = 0;
-			intensity = 0;
-			whomps.erase(whomps.begin());
-		}else if(inc > 0 && intensity < 90){
-			intensity += inc/2;
-			float add = 25 + 20.0f * sin(ofDegToRad(intensity));
-			bg_alpha = add;
-			
-		}else if(intensity >= 90){
-			intensity += inc/2;
-			float add = 25 + 20.0f * sin(ofDegToRad(intensity));
-			bg_alpha = add;			
-		}
-		
-	}
-	
-	
-}
 
 
 void testApp::pairPointsnStars(){
@@ -403,6 +361,13 @@ void testApp::pairPointsnStars(){
 					st_pnt->isActive = true;
 					st_pnt->pairedUser = &dsUsers[activeList[i]];
 					activeStarList.push_back(st_pnt);
+					
+					ofxOscMessage m;
+					m.setAddress("/newStar");
+					m.addIntArg(st_pnt->id); //unique ref to star 
+					m.addStringArg(st_pnt->activeStar->starName);
+					sender.sendMessage(m);
+					
 				}
 			}
 		}

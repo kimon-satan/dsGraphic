@@ -10,12 +10,6 @@
 #define	HOST "localhost"
 #define SCPORT 57120
 
-struct whomp{
-
-	float length;
-	int count;
-
-};
 
 class testApp : public ofBaseApp{
 public:
@@ -42,7 +36,6 @@ private:
 	int findColumn(float x);
 	void pairPointsnStars();
 	void manageStars();
-	void manageWhomps(int sleepCount = -1);
 	
 	ofxOscReceiver	receiver;
 	ofxOscSender	sender;
@@ -63,7 +56,6 @@ private:
 	
 	vector< vector<star *> > stars2d;
 	vector<star *> activeStarList;
-	vector <whomp> whomps;
 	
 	int numStars;
 	double distThresh;

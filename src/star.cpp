@@ -15,6 +15,7 @@ star::star(){
 	rotSpeed = -0.15;
 	isActive = false;
 	isCovered = false;
+	isUserMoving = false;
 	max_size = 300;
 	assignAlgorithm();
 	pairedUser = NULL;
@@ -69,8 +70,8 @@ void star::update(){
 		
 	}else if(!pairedUser->isActive){
 		
-		isActive = false;
 		pairedUser = NULL;
+		isActive = false;
 		active_size = size;
 		intensity = base;
 		//findIsCovered(); //no need as it won't be covered as just disappeared
@@ -87,7 +88,19 @@ void star::update(){
 			
 		}
 		
-		activeStar->update(active_size, pos, pairedUser->isMoving); 
+		if(isUserMoving != pairedUser->isMoving){
+			
+			activeStar->newEvent = true;
+			activeStar->eventTime = ofRandom(40,80);
+			activeStar->eventPolarity = (pairedUser->isMoving) ? 1 : - 1;
+			isUserMoving = pairedUser->isMoving;
+			
+		}else if(activeStar->eventTime > 0){
+			activeStar->eventTime -= 1;
+			activeStar->newEvent = false;
+		}
+		
+		activeStar->update(active_size, pos); 
 	}
 	
 }

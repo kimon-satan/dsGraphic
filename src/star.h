@@ -32,11 +32,10 @@ public:
 	
 	float rotSpeed;
 	ofVec2f pos;
-	float size, active_size, max_size;
+	float size, active_size, max_size, worldCircum;
 	float intensity, alpha;
-	float worldCircum;
 	int id, col;
-	bool twinkling, onScreen;
+	bool twinkling, onScreen, isUserMoving;
 	
 	dsUser * pairedUser;
 	bool isActive, isCovered;
@@ -46,6 +45,8 @@ public:
 	ofColor tc;
 	vector<star*>* activeStarList;
 	activeStarBase  * activeStar;
+	
+
 	
 	
 };

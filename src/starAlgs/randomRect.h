@@ -21,6 +21,8 @@ class randomRect : public activeStarBase{
 		count = 0;
 		speed = 3;
 		size = 1;
+		starName = "randomRect";
+		newEvent = false;
 		
 	};
 	
@@ -31,20 +33,19 @@ class randomRect : public activeStarBase{
 	int m_count;
 	
 	
-	void update(float size, ofVec2f pos, bool isMove){
+	void update(float size, ofVec2f pos){
 		
-		
-		if(isMove != this->isMove){
-		
-			m_count = ofRandom(40,80);
-			speed = (isMove) ?  ofRandom(4,7) : ofRandom(1,2);
+		if(newEvent){
 			
-		}else if(m_count > 0){m_count -= 1;
-		}else{speed = 2;}
+			newEvent = true;
+			speed = (eventPolarity == 1) ?  ofRandom(4,7) : ofRandom(1,2);
+			
+		}else if(eventTime == 0){
+			speed = 2;
+		}
 		
 		this->size = size;
 		this->pos = pos;
-		this->isMove = isMove;
 		
 		if(count == 0){
 			rot_add = ofRandom(-20,20);
