@@ -79,7 +79,10 @@ void testApp::setup(){
 	numStars = count;
 	columnWidth = circum/stars2d.size();
 
-	for(int i =0; i < 20; i++)dsUsers[i].isActive = false;
+	for(int i =0; i < 20; i++){
+		dsUsers[i].id = i;
+		dsUsers[i].isActive = false;
+	}
 	
 	testIndex = 0;
 	distThresh = 200;
@@ -192,17 +195,16 @@ void testApp::manageStars(){
 			stars2d[col].push_back(activeStarList[i]); // put a star pointer into the relevant column
 			activeStarList[i]->col = col;
 			activeStarList[i]->twinkle(5);
-			activeStarList.erase(activeStarList.begin() + i);
 			
 			ofxOscMessage m;
 			m.setAddress("/endStar");
-			m.addIntArg(activeStarList[i]->id);
+			m.addIntArg(activeStarList[i]->pairedUser->id);
 			sender.sendMessage(m);
+		//	cout <<  "es: " << activeStarList[i]->pairedUser->id << "\n" ;
 			
-			activeStarList[i]->pairedUser = NULL; // now get rid of the pairedUser
+			activeStarList.erase(activeStarList.begin() + i);
 			
 			
-		
 		}		
 	} 
 	
@@ -220,7 +222,7 @@ void testApp::manageStars(){
 					float a = stars2d[i][j]->active_size/stars2d[i][j]->max_size; //there could ultimately be different max_sizes
 					ofxOscMessage m;
 					m.setAddress("/updateStar");
-					m.addIntArg(stars2d[i][j]->id);
+					m.addIntArg(stars2d[i][j]->pairedUser->id); //the users id for no searching in sclang
 					m.addFloatArg(a); // normalised value for size;
 					m.addIntArg(stars2d[i][j]->activeStar->newEvent);
 					m.addIntArg(stars2d[i][j]->activeStar->eventTime);
@@ -298,11 +300,6 @@ void testApp::manageStars(){
 					float twink = ofRandom(0,1);
 					if(twink <= (float)1/(10 * stars2d[c].size())){
 						stars2d[c][j]->twinkle(ofRandom(100,220));
-						ofxOscMessage m;
-						m.setAddress("/twinkle");
-						m.addFloatArg(stars2d[c][j]->pos.x/screenWidth);
-						m.addFloatArg(stars2d[c][j]->pos.y/screenHeight + 0.5);
-						sender.sendMessage(m);
 						
 					}
 					
@@ -364,9 +361,10 @@ void testApp::pairPointsnStars(){
 					
 					ofxOscMessage m;
 					m.setAddress("/newStar");
-					m.addIntArg(st_pnt->id); //unique ref to star 
+					m.addIntArg(st_pnt->pairedUser->id); //unique ref to star 
 					m.addStringArg(st_pnt->activeStar->starName);
 					sender.sendMessage(m);
+					cout << "ns: " << st_pnt->pairedUser->id <<" \n";
 					
 				}
 			}

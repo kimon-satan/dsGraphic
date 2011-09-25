@@ -67,10 +67,11 @@ void star::update(){
 		(abs(pos.x) > ofGetScreenWidth()/2) ? onScreen = false : onScreen = true;
 		if(twinkling)twinkle();
 		findIsCovered();
+		if(pairedUser)pairedUser = NULL;
 		
 	}else if(!pairedUser->isActive){
 		
-		pairedUser = NULL;
+		//pairedUser = NULL; //we still need the reference for osc messaging 
 		isActive = false;
 		active_size = size;
 		intensity = base;

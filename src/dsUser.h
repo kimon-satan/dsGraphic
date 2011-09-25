@@ -43,6 +43,7 @@ public:
 	ofVec2f pos;
 	bool isActive, isPaired, isMoving ,isStill, isFake;
 	int starId;
+	int id;
 	
 };
 
