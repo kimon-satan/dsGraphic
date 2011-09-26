@@ -1,5 +1,14 @@
 /*
- *  randomRect.h
+ *  greyRect.h
+ *  dsGraphics
+ *
+ *  Created by Simon Katan on 26/09/2011.
+ *  Copyright 2011 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+/*
+ *  greyRect.h
  *  dsGraphics
  *
  *  Created by Simon Katan on 25/09/2011.
@@ -7,27 +16,29 @@
  *
  */
 
-#ifndef RANDOM_RECT
-#define RANDOM_RECT
+#ifndef GREY_RECT
+#define GREY_RECT
 
 #include "activeStarBase.h";
 
-class randomRect : public activeStarBase{
+class greyRect : public activeStarBase{
 	
-	public:
+public:
 	
-	randomRect(){
+	greyRect(){
 		
 		rot = 0;
 		rot_add = 0;
+		col = 0;
 		count = 0;
 		speed = 3;
 		size = 1;
-		
-		starName = "randomRect";
+		starName = "greyRect";
 		newEvent = false;
-		negMin = 40; negMax = 80;
-		posMin = 40; posMax = 80;
+		col.set(80,80,80,255);
+		
+		negMin = 80; negMax = 160;
+		posMin = 6; posMax = 10;
 		
 	};
 	
@@ -43,10 +54,15 @@ class randomRect : public activeStarBase{
 		if(newEvent){
 			
 			newEvent = true;
-			speed = (eventPolarity > 0) ?  ofRandom(1,2) : ofRandom(4,7);
-
+			if(eventPolarity > 0){  
+				col.set(255,255,255,255);
+			}
+			
 		}else if(eventTime == 0){
-			speed = 2;
+			col.set(80,80,80,255);
+		}else if(eventTime > 0  && eventPolarity < 0){
+			(ofRandom(0,1) > 0.3) ? col.set(0,255):col.set(80,255);
+			
 		}
 		
 		this->size = size;
@@ -56,11 +72,10 @@ class randomRect : public activeStarBase{
 			rot_add = ofRandom(-20,20);
 			rect.set(ofRandom(-20,20), ofRandom(-20,20), ofRandom(max_size/4,max_size), ofRandom(max_size/4,max_size));
 			rot += 0.1;
-			col.set(ofRandom(200,255), ofRandom(200,255), ofRandom(200,255), 255);
 		}
 		
 		count = (count + 1)%speed;
-	
+		
 	}
 	
 	void draw(bool isAlpha){
@@ -89,5 +104,4 @@ class randomRect : public activeStarBase{
 	
 	
 };
-
 #endif

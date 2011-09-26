@@ -28,7 +28,7 @@ public:
 	void drawBG(bool isAlpha);
 	void drawActiveAlgorithm(bool isAlpha);
 	void twinkle(int t_count = 0);
-	void assignAlgorithm();
+	void assignAlgorithm(int alg);
 	
 	float rotSpeed;
 	ofVec2f pos;

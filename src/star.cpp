@@ -12,12 +12,11 @@
 
 star::star(){
 	
-	rotSpeed = -0.15;
+	rotSpeed = 0.15;
 	isActive = false;
 	isCovered = false;
 	isUserMoving = false;
 	max_size = 300;
-	assignAlgorithm();
 	pairedUser = NULL;
 	float sizeArray[6] = {0.5,1,2.75,3.75,5.75,7.75};
 	float probArray[6] = {0.16,0.16,0.3,0.24,0.1,0.06};
@@ -58,6 +57,7 @@ void star::update(){
 	
 	if(!isActive){
 		pos.x += rotSpeed;
+		
 		if(pos.x > worldCircum/2){
 			pos.x = -worldCircum/2;
 		}else if(pos.x < -worldCircum/2){
@@ -75,24 +75,19 @@ void star::update(){
 		isActive = false;
 		active_size = size;
 		intensity = base;
+		activeStar->reset();
 		//findIsCovered(); //no need as it won't be covered as just disappeared
 		
 	}else{
 		
 		findConflicts();
 		
-		if(active_size > 25){
 		
-			ofVec2f dir = pairedUser->pos - pos;
-			dir.normalize();
-			pos += dir * 0.3; //attractor for star
-			
-		}
 		
 		if(isUserMoving != pairedUser->isMoving){
 			
 			activeStar->newEvent = true;
-			activeStar->eventTime = ofRandom(40,80);
+			activeStar->eventTime = (pairedUser->isMoving) ? ofRandom(activeStar->posMin,activeStar->posMax) :ofRandom(activeStar->negMin,activeStar->negMax);
 			activeStar->eventPolarity = (pairedUser->isMoving) ? 1 : - 1;
 			isUserMoving = pairedUser->isMoving;
 			
@@ -109,12 +104,19 @@ void star::update(){
 void star::findConflicts(){
 	
 	bool growBlocked = false;
+	bool moveBlocked = false;
+	
+	ofVec2f dir = pairedUser->pos - pos;
+	dir.normalize();
+	ofVec2f t_pos = pos + dir * 0.3; //attractor for star
 	
 	for(int i = 0; i < activeStarList->size(); i++){
 		
 		star * s = activeStarList->at(i);
 		
 		if(s->id != id){
+			
+			if(t_pos.distance(s->pos) < s->active_size + active_size)moveBlocked = true;
 		
 			if(pos.distance(s->pos) < s->active_size + active_size){
 				
@@ -136,8 +138,9 @@ void star::findConflicts(){
 		}
 	}
 	
-	if(!growBlocked){active_size = min(max_size,active_size + 0.05f);}
-	
+	if(!growBlocked)active_size = min(max_size,active_size + 0.05f);
+	if(!moveBlocked && active_size > 25)pos = t_pos;
+		
 }
 
 void star::findIsCovered(){
@@ -222,9 +225,16 @@ void star::drawActiveAlgorithm(bool isAlpha){
 	}	
 }
 
-void star::assignAlgorithm(){
+void star::assignAlgorithm(int alg){
 
-	activeStar = new randomRect();
+	switch(alg){
+			
+		case 0:activeStar = new randomRect();break;
+		case 1:activeStar = new greyRect();break;
+		case 2:activeStar = new rotShrinkFrames();break;
+			
+	}
+	
 	activeStar->max_size = max_size;
 	
 }
@@ -232,6 +242,6 @@ void star::assignAlgorithm(){
 
 star::~star(){
 	
-	//delete activeStar;
+	delete activeStar;
 	
 }

@@ -8,4 +8,6 @@
  */
 
 //include List
-#include "randomRect.h" //so far only 1 :/
+#include "randomRect.h" 
+#include "greyRect.h" 
+#include "rotShrinkFrames.h"

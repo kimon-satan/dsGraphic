@@ -58,7 +58,7 @@ void testApp::setup(){
 				ofVec2f displace(ofRandom(-noise,noise), ofRandom(-noise,noise));
 				newStar->pos += displace;
 				newStar->id = count;
-
+				newStar->assignAlgorithm(count%3);
 				
 				newStar->activeStarList = &activeStarList;
 				if(k < 2){  
@@ -192,15 +192,18 @@ void testApp::manageStars(){
 		
 		if(!activeStarList[i]->isActive){
 			int col = findColumn(activeStarList[i]->pos.x);
-			stars2d[col].push_back(activeStarList[i]); // put a star pointer into the relevant column
-			activeStarList[i]->col = col;
+			
+			if(activeStarList[i]->col != col){
+				stars2d[col].push_back(activeStarList[i]); // put a star pointer into the relevant column - ONLY if a different column
+				activeStarList[i]->col = col;
+			}
+			
 			activeStarList[i]->twinkle(5);
 			
 			ofxOscMessage m;
 			m.setAddress("/endStar");
 			m.addIntArg(activeStarList[i]->pairedUser->id);
 			sender.sendMessage(m);
-		//	cout <<  "es: " << activeStarList[i]->pairedUser->id << "\n" ;
 			
 			activeStarList.erase(activeStarList.begin() + i);
 			
@@ -213,7 +216,8 @@ void testApp::manageStars(){
 		for(int j = 0; j < stars2d[i].size(); j ++){
 			if(stars2d[i][j]->col != i ){
 				stars2d[i].erase(stars2d[i].begin() + j); //delete old references
-				j -= 1;//does this work ?
+				j -= 1;
+				
 			}else{
 				stars2d[i][j]->update(); 
 				

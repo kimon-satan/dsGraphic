@@ -19,7 +19,10 @@ public:
 	float size, max_size;
 	string starName;
 	int eventTime, eventPolarity;
+	int negMin, negMax;
+	int posMin, posMax;
 	bool newEvent;
+	
 	
 	virtual void update(float size, ofVec2f pos){
 	
@@ -27,6 +30,10 @@ public:
 	
 	virtual void draw(bool isAlpha){
 	
+	}
+	
+	virtual void reset(){
+		
 	}
 	
 	
