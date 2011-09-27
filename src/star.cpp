@@ -82,9 +82,7 @@ void star::update(){
 		
 		findConflicts();
 		
-		
-		
-		if(isUserMoving != pairedUser->isMoving){
+		if(isUserMoving != pairedUser->isMoving && activeStar->eventTime == 0){
 			
 			activeStar->newEvent = true;
 			activeStar->eventTime = (pairedUser->isMoving) ? ofRandom(activeStar->posMin,activeStar->posMax) :ofRandom(activeStar->negMin,activeStar->negMax);

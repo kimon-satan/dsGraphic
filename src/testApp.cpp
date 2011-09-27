@@ -588,9 +588,10 @@ void testApp::keyReleased(int key){
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
 
-	if(activeList.size() > 0){
-		dsUsers[activeList[0]].pos.set(x - screenWidth/2, y - screenHeight/2);
-	}
+		for(int i =0; i< activeList.size(); i++){
+			dsUsers[activeList[i]].pos.set(x - screenWidth/2, y - screenHeight/2);
+		}
+	
 }
 
 //--------------------------------------------------------------
