@@ -55,7 +55,7 @@ class randomRect : public activeStarBase{
 		if(count == 0){
 			rot_add = ofRandom(-20,20);
 			rect.set(ofRandom(-20,20), ofRandom(-20,20), ofRandom(max_size/4,max_size), ofRandom(max_size/4,max_size));
-			rot += 0.1;
+			rot =0; //+= 0.1;
 			col.set(ofRandom(200,255), ofRandom(200,255), ofRandom(200,255), 255);
 		}
 		
@@ -71,7 +71,7 @@ class randomRect : public activeStarBase{
 		
 		glPushMatrix();
 		ofSetRectMode(OF_RECTMODE_CENTER);
-		glRotated(rot + rot_add, 0, 0, 1);
+		//glRotated(rot + rot_add, 0, 0, 1);
 		if(!isAlpha){
 			ofSetColor(0, 0, 0);
 			ofRect(rect.x,rect.y, rect.width + 10, rect.height + 10); // a slightly larger rect of black for blur

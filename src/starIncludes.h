@@ -8,6 +8,9 @@
  */
 
 //include List
-#include "randomRect.h" 
-#include "greyRect.h" 
-#include "rotShrinkFrames.h"
+
+#include "still.h" // maybe this won't be used
+#include "pulsatingRings.h"
+#include "strobingRings.h"
+#include "blackout.h"
+#include "strobingLines.h"

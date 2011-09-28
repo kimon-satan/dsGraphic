@@ -26,7 +26,7 @@ public:
 	void findConflicts();
 	void findIsCovered();
 	void drawBG(bool isAlpha);
-	void drawActiveAlgorithm(bool isAlpha);
+	void drawActiveAlgorithm();
 	void twinkle(int t_count = 0);
 	void assignAlgorithm(int alg);
 	

@@ -58,7 +58,7 @@ void testApp::setup(){
 				ofVec2f displace(ofRandom(-noise,noise), ofRandom(-noise,noise));
 				newStar->pos += displace;
 				newStar->id = count;
-				newStar->assignAlgorithm(count%3);
+				newStar->assignAlgorithm(i%2); ///(i%4);
 				
 				newStar->activeStarList = &activeStarList;
 				if(k < 2){  
@@ -462,7 +462,7 @@ void testApp::draw(){
 		
 		for(int i = 0; i < stars2d.size(); i ++){ 
 			for(int j = 0; j < stars2d[i].size(); j ++){ 
-				stars2d[i][j]->drawActiveAlgorithm(false); 
+				stars2d[i][j]->drawActiveAlgorithm(); 
 			}
 		}
 		
@@ -506,19 +506,6 @@ void testApp::draw(){
 		glPopMatrix();
 		blurBG.end();
 		
-		blurFG.begin(1,1);
-		glPushMatrix();
-		
-		glTranslatef(screenWidth/2, screenHeight/2, 0);
-		for(int i = 0; i < stars2d.size(); i ++){ 
-			for(int j = 0; j < stars2d[i].size(); j ++){ 
-				stars2d[i][j]->drawActiveAlgorithm(false); 
-			}
-		}
-		
-		glPopMatrix();
-		blurFG.end();
-		
 		ofSetColor(255);
 		blurBG.draw(); 
 		
@@ -539,24 +526,19 @@ void testApp::draw(){
 		
 		glPopMatrix();
 		ofSetColor(255, 255, 255, 255);
+		ofEnableBlendMode(OF_BLENDMODE_ALPHA);
 		ofDisableBlendMode();
 		
-		ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-		
-		ofSetColor(255);
-		blurFG.draw(); 
-		
-		ofEnableBlendMode(OF_BLENDMODE_ADD);
 		glPushMatrix();
 		glTranslatef(screenWidth/2, screenHeight/2, 0);
 		for(int i = 0; i < stars2d.size(); i ++){ 
 			for(int j = 0; j < stars2d[i].size(); j ++){ 
-				stars2d[i][j]->drawActiveAlgorithm(true); 
+				stars2d[i][j]->drawActiveAlgorithm(); 
 			}
 		}
 		glPopMatrix();
 		ofSetColor(255, 255, 255, 255);
-		ofDisableBlendMode();
+		
 		
 	}
 	

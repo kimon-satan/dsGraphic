@@ -216,21 +216,21 @@ void star::drawBG(bool isAlpha){
 	
 }
 
-void star::drawActiveAlgorithm(bool isAlpha){
+void star::drawActiveAlgorithm(){
 	
-	if(isActive){
-		activeStar->draw(isAlpha);
-	}	
+	if(isActive)activeStar->draw();
 }
 
 void star::assignAlgorithm(int alg){
 
 	switch(alg){
-			
-		case 0:activeStar = new randomRect();break;
-		case 1:activeStar = new greyRect();break;
-		case 2:activeStar = new rotShrinkFrames();break;
-			
+		
+		case 0:activeStar = new strobingLines();break;
+		case 1:activeStar = new strobingRings();break;
+		//case 0:activeStar = new still();break;
+		//case 1:activeStar = new pulsatingRings();break;
+		//case 3:activeStar = new blackout();break;
+		
 	}
 	
 	activeStar->max_size = max_size;

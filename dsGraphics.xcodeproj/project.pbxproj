@@ -65,6 +65,7 @@
 
 /* Begin PBXFileReference section */
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
+		D903617F1433085F006F290B /* strobingLines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = strobingLines.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/strobingLines.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D90E977C1429132700E5F7C8 /* ofxBlurShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxBlurShader.cpp; path = Library/Frameworks/of_preRelease_v007_osx/contribAddons/addons/ofxBlurShader/ofxBlurShader.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D90E977D1429132700E5F7C8 /* ofxBlurShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxBlurShader.h; path = Library/Frameworks/of_preRelease_v007_osx/contribAddons/addons/ofxBlurShader/ofxBlurShader.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D90E9845142918DE00E5F7C8 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = install.xml; path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxOsc/install.xml; sourceTree = SYSTEM_DEVELOPER_DIR; };
@@ -97,9 +98,10 @@
 		D91B1984142A3CF300FBE6D2 /* star.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = star.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/star.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1985142A3CF300FBE6D2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/main.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1986142A3CF300FBE6D2 /* dsUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dsUser.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/dsUser.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
-		D9A53A811430BF66004F4700 /* greyRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = greyRect.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/greyRect.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
-		D9A53A9E1430C81B004F4700 /* rotShrinkFrames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rotShrinkFrames.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/rotShrinkFrames.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
-		D9A9CC54142F8E0500AC031C /* randomRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = randomRect.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/randomRect.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D9D63E901432319F00BF0007 /* still.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = still.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/still.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D9D63F551432507A00BF0007 /* pulsatingRings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pulsatingRings.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/pulsatingRings.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D9D63F901432568600BF0007 /* strobingRings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = strobingRings.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/strobingRings.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D9D640F91432711500BF0007 /* blackout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = blackout.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/blackout.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9E90BE4142BC2FD00F63805 /* testApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = testApp.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/testApp.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9F4E12C142F3EC700047A3F /* activeStarBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = activeStarBase.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/activeStarBase.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9F4E133142F440000047A3F /* starIncludes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = starIncludes.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starIncludes.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
@@ -113,7 +115,7 @@
 		E45BE9770E8CC7DD009D7055 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		E45BE9790E8CC7DD009D7055 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
-		E4B69B5B0A3A1756003C02F2 /* graphicsExampleDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = graphicsExampleDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69B5B0A3A1756003C02F2 /* graphicsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = graphicsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "openFrameworks-Info.plist"; sourceTree = "<group>"; };
 		E4C2424410CC5A17004149E2 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		E4C2424510CC5A17004149E2 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -301,10 +303,12 @@
 			isa = PBXGroup;
 			children = (
 				D9F4E12C142F3EC700047A3F /* activeStarBase.h */,
-				D9A9CC54142F8E0500AC031C /* randomRect.h */,
-				D9A53A811430BF66004F4700 /* greyRect.h */,
 				D9F4E133142F440000047A3F /* starIncludes.h */,
-				D9A53A9E1430C81B004F4700 /* rotShrinkFrames.h */,
+				D9D63E901432319F00BF0007 /* still.h */,
+				D9D63F551432507A00BF0007 /* pulsatingRings.h */,
+				D9D640F91432711500BF0007 /* blackout.h */,
+				D9D63F901432568600BF0007 /* strobingRings.h */,
+				D903617F1433085F006F290B /* strobingLines.h */,
 			);
 			name = activeStarClasses;
 			sourceTree = "<group>";
@@ -337,18 +341,18 @@
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
-				E4B69B5B0A3A1756003C02F2 /* graphicsExampleDebug.app */,
+				E4B69B5B0A3A1756003C02F2 /* graphicsExample.app */,
 			);
 			sourceTree = "<group>";
 		};
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				D91B1985142A3CF300FBE6D2 /* main.cpp */,
 				D9E90BE4142BC2FD00F63805 /* testApp.cpp */,
 				D91B1981142A3CF300FBE6D2 /* testApp.h */,
 				D91B1983142A3CF300FBE6D2 /* star.h */,
 				D91B1984142A3CF300FBE6D2 /* star.cpp */,
-				D91B1985142A3CF300FBE6D2 /* main.cpp */,
 				D91B1986142A3CF300FBE6D2 /* dsUser.h */,
 				D9F4E131142F411C00047A3F /* activeStarClasses */,
 			);
@@ -383,7 +387,7 @@
 			);
 			name = graphicsExample;
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* graphicsExampleDebug.app */;
+			productReference = E4B69B5B0A3A1756003C02F2 /* graphicsExample.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

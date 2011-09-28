@@ -28,7 +28,7 @@ public:
 	
 	}
 	
-	virtual void draw(bool isAlpha){
+	virtual void draw(){
 	
 	}
 	
