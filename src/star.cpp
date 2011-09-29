@@ -92,7 +92,9 @@ void star::update(){
 		}else if(activeStar->eventTime > 0){
 			activeStar->eventTime -= 1;
 			activeStar->newEvent = false;
+			if(activeStar->eventTime == 0)isUserMoving = pairedUser->isMoving; // so no delayed triggering of events
 		}
+		
 		
 		activeStar->update(active_size, pos); 
 	}

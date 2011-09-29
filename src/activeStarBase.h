@@ -7,6 +7,8 @@
  *
  */
 
+#include <boost/random.hpp>
+#include <boost/random/normal_distribution.hpp>
 
 #ifndef ACTIVE_STAR_BASE
 #define ACTIVE_STAR_BASE

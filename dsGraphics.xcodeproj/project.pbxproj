@@ -99,7 +99,7 @@
 		D91B1985142A3CF300FBE6D2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/main.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1986142A3CF300FBE6D2 /* dsUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dsUser.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/dsUser.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9231DE41433610700313CA7 /* regPulsingRings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = regPulsingRings.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/regPulsingRings.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
-		D989365B1434561600D4BE04 /* statFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = statFlow.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/statFlow.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D989365B1434561600D4BE04 /* statFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = statFlow.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/statFlow.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9D63E901432319F00BF0007 /* still.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = still.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/still.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9D63F551432507A00BF0007 /* pulsatingRings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pulsatingRings.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/pulsatingRings.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9D63F901432568600BF0007 /* strobingRings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = strobingRings.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/strobingRings.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
@@ -498,6 +498,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					/Developer/Library/boost_1_47_0,
+					"$(OF_CORE_HEADERS)",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
 					"-lpthread",

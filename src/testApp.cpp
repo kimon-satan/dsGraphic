@@ -58,7 +58,7 @@ void testApp::setup(){
 				ofVec2f displace(ofRandom(-noise,noise), ofRandom(-noise,noise));
 				newStar->pos += displace;
 				newStar->id = count;
-				newStar->assignAlgorithm(3); ///(i%4);
+				newStar->assignAlgorithm(i%4); ///(i%4);
 				
 				newStar->activeStarList = &activeStarList;
 				if(k < 2){  
