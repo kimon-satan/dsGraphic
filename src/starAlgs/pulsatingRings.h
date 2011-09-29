@@ -69,7 +69,6 @@ public:
 		
 		size = t_size;
 		pos = t_pos;
-		cout << rings[0] << "\n";
 		numpoints = min(3000,(int)size * 10);
 		
 	}

@@ -7,8 +7,6 @@
  *
  */
 
-
-
 #ifndef STROBING_LINES
 #define STROBING_LINES
 

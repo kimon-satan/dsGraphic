@@ -14,3 +14,5 @@
 #include "strobingRings.h"
 #include "blackout.h"
 #include "strobingLines.h"
+#include "regPulsingRings.h"
+#include "statFlow.h"
