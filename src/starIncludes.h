@@ -9,10 +9,15 @@
 
 //include List
 
-#include "still.h" // maybe this won't be used
-#include "pulsatingRings.h"
 #include "strobingRings.h"
-#include "blackout.h"
 #include "strobingLines.h"
 #include "regPulsingRings.h"
 #include "statFlow.h"
+#include "om.h"
+
+
+/* unused
+#include "still.h" 
+#include "pulsatingRings.h"
+#include "blackout.h"
+*/

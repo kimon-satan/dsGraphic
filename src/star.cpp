@@ -231,8 +231,8 @@ void star::assignAlgorithm(int alg){
 		case 1:activeStar = new strobingRings();break;
 		case 2:activeStar = new regPulsingRings();break;
 		case 3:activeStar = new statFlow();break;
-		//case 1:activeStar = new pulsatingRings();break;
-		//case 3:activeStar = new blackout();break;
+		case 4:activeStar = new om();break;
+	
 		
 	}
 	

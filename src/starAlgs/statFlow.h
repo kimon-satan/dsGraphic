@@ -37,7 +37,7 @@ public:
 			if(eventPolarity < 0){
 				eventLength = eventTime;
 				e_mul = 60.0f/eventLength;
-				c_mul = 0.36 * 2/eventLength;
+				c_mul = 0.36 * 5/eventLength;
 				sd_center = 0.001;
 				o_width = 0.7;
 				i_width = 0.7;
@@ -52,9 +52,9 @@ public:
 			count = 270;
 			e_phase = abs(sin(ofDegToRad(210 - (float)ePassed * e_mul)));
 			if((float)ePassed/eventLength > 0.5){
-				sd_center += c_mul;
 				o_width -= o_mul;
 				i_width -= i_mul;
+				if((float)ePassed/eventLength > 0.8)sd_center += c_mul;
 			}
 			
 		}else if(eventTime == 0 || eventPolarity > 0){
@@ -120,7 +120,7 @@ public:
 			p_e.rotate(r);
 			glVertex2f(p_e.x, p_e.y);
 			
-			if((float)eventTime/eventLength < 0.75 ||eventTime == 0 || eventPolarity > 0){
+			if((float)eventTime/eventLength < 0.4 ||eventTime == 0 || eventPolarity > 0){
 			p_c.rotate(r);
 			glVertex2f(p_c.x, p_c.y);
 			}			

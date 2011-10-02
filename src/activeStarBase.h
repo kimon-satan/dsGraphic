@@ -24,6 +24,7 @@ public:
 	int negMin, negMax;
 	int posMin, posMax;
 	bool newEvent;
+	int numpoints;
 	
 	
 	virtual void update(float size, ofVec2f pos){

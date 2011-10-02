@@ -93,6 +93,7 @@
 		D90E9863142918DF00E5F7C8 /* ofxOscReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxOscReceiver.h; path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxOsc/src/ofxOscReceiver.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D90E9864142918DF00E5F7C8 /* ofxOscSender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxOscSender.cpp; path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxOsc/src/ofxOscSender.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D90E9865142918DF00E5F7C8 /* ofxOscSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxOscSender.h; path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxOsc/src/ofxOscSender.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D91B0711143875A10074A9D7 /* om.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = om.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/om.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1981142A3CF300FBE6D2 /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = testApp.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/testApp.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1983142A3CF300FBE6D2 /* star.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = star.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/star.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1984142A3CF300FBE6D2 /* star.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = star.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/star.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
@@ -313,6 +314,7 @@
 				D9D63F901432568600BF0007 /* strobingRings.h */,
 				D903617F1433085F006F290B /* strobingLines.h */,
 				D9231DE41433610700313CA7 /* regPulsingRings.h */,
+				D91B0711143875A10074A9D7 /* om.h */,
 			);
 			name = activeStarClasses;
 			sourceTree = "<group>";
