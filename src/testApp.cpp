@@ -3,7 +3,14 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
-//	ofSetCircleResolution(20);
+	//ofSetCircleResolution(30);
+	
+	ofDisableArbTex(); 
+    
+    //prepare quadric for sphere
+    quadric = gluNewQuadric();
+    gluQuadricTexture(quadric, GL_TRUE);
+    gluQuadricNormals(quadric, GLU_SMOOTH);
 	
 	receiver.setup( PORT );
 	sender.setup(HOST, SCPORT);
@@ -12,14 +19,15 @@ void testApp::setup(){
 	m.setAddress("/init");
 	sender.sendMessage(m);
 	
-	ofSetVerticalSync(true);
+	//ofSetVerticalSync(true);
 	ofSetFrameRate(60);
 	outputMode = 1;
 	int rows, cols;
 	showPoints = false;
 	
-	screenWidth = ofGetScreenWidth();
 	screenHeight = ofGetScreenHeight();
+	screenWidth = ofGetScreenHeight();
+	
 	radius = screenHeight;
 	circum = screenWidth * 1.25;
 	
@@ -27,12 +35,13 @@ void testApp::setup(){
 	blurFG.setup(screenWidth, screenHeight);
 	
 	float h, s, offset;
-	rows = 16;
+	rows = 18;
 	s = screenHeight/(rows * 2.8);
 	h =  s * sqrt(3.0f);
 	cols = circum/h;
 	offset = h/4.0f;
 	bg_alpha = 45;
+	selPoint = 0;
 	
 	int noise = 2;
 	int count = 0;
@@ -53,12 +62,12 @@ void testApp::setup(){
 			for(int k =0; k < 4; k ++){
 				star * newStar = new star();
 				newStar->worldCircum = circum;
-				newStar->rotSpeed = -screenWidth/(pow(60.0f,2) * 2);
+				newStar->rotSpeed = -screenWidth/(pow(60.0f,2));
 				newStar->pos = ofVec2f(positions[k].x - circum/2, positions[k].y - screenHeight/2);
 				ofVec2f displace(ofRandom(-noise,noise), ofRandom(-noise,noise));
 				newStar->pos += displace;
 				newStar->id = count;
-				newStar->assignAlgorithm(4); ///(i%5);
+				newStar->assignAlgorithm(i%5); ///(i%5);
 				
 				newStar->activeStarList = &activeStarList;
 				if(k < 2){  
@@ -88,8 +97,32 @@ void testApp::setup(){
 	distThresh = 200;
 	testPoint = false;
 	bg.loadImage("moonTest.jpg");
+	sp.loadImage("sphere.jpg");
 	
-	glDisable(GL_DEPTH_TEST); 
+	fbo_tex.allocate(screenWidth, screenHeight, GL_RGBA); 
+	map_tex.allocate(screenWidth, screenHeight, GL_RGBA);
+
+	w_prop = (float)screenWidth/ofNextPow2(screenWidth);
+	h_prop = (float)screenHeight/ofNextPow2(screenHeight);
+	
+	gridSize = 11;
+	
+	for(int y= 0; y < gridSize; y++){
+		for(int x= 0; x < gridSize; x++){
+			
+			ofPoint p((float)x/(gridSize-1),(float)y/(gridSize-1));
+			ofPoint np = p * ofPoint(screenWidth,screenHeight);
+			v_points.push_back(np);
+			o_points.push_back(np);
+			p *= ofPoint(w_prop,h_prop);
+			t_points.push_back(p);
+			
+			
+		}
+	}
+	
+	sphereRot = 0;
+	loadMappingPoints();
 	
 	
 }
@@ -173,7 +206,8 @@ void testApp::update(){
 	}
 	
 	if(outputMode >= 2){
-		
+		//sphereRot -= 0.05;
+		sphereRot = ofMap(mouseX, 0, ofGetScreenWidth(), 0, 360, false);
 		pairPointsnStars();
 		manageStars();
 		
@@ -256,10 +290,10 @@ void testApp::manageStars(){
 
 	//time counting wave  of stars
 	
-	int waveWidth = 8;
+	int waveWidth = 5;
 	static int msecs = 0;
 	static int currentCol = findColumn(-screenWidth/2);
-	static int timeInterval = (30000/((screenWidth + ((waveWidth-1) * columnWidth))/columnWidth)) * 0.75; //0.75 is compensation for the back rotation of the stars
+	static int timeInterval = (30000/((screenWidth + ((waveWidth-1) * columnWidth))/columnWidth)) * 0.375; //0.75 is compensation for the back rotation of the stars
 	static int colCount = 0;
 	static int sleepTime = 27;
 	
@@ -342,6 +376,8 @@ void testApp::pairPointsnStars(){
 				
 				int col = findColumn(dsUsers[activeList[i]].pos.x );
 				
+				
+				//there was a crash here
 				for(int k = 0; k < 3; k++){
 					for(int j =0; j < stars2d[col - 1 + k].size(); j++){
 						if(!stars2d[col - 1 + k][j]->isActive && !stars2d[col - 1 + k][j]->isCovered && stars2d[col - 1 + k][j]->intensity > 0){ 
@@ -368,7 +404,7 @@ void testApp::pairPointsnStars(){
 					m.addIntArg(st_pnt->pairedUser->id); //unique ref to star 
 					m.addStringArg(st_pnt->activeStar->starName);
 					sender.sendMessage(m);
-					cout << "ns: " << st_pnt->pairedUser->id <<" \n";
+					
 					
 				}
 			}
@@ -377,189 +413,357 @@ void testApp::pairPointsnStars(){
 	}
 }
 
+void testApp::saveMappingPoints(){
+	
+	ofxXmlSettings XML;
+	int tagNum = XML.addTag("MAPPINGPOINTS");
+	if( XML.pushTag("MAPPINGPOINTS", tagNum) ){
+		
+		for(int i = 0; i < v_points.size(); i++){
+			
+			tagNum = XML.addTag("POINT");
+			if(XML.pushTag("POINT", tagNum)){
+				XML.setValue("X", v_points[i].x);
+				XML.setValue("Y", v_points[i].y);
+				XML.popTag();
+			}
+			
+		}
+		
+		XML.popTag();
+	}
+	
+	XML.saveFile("mappingPoints.xml");
+
+}
+
+void testApp::loadMappingPoints(){
+
+	ofxXmlSettings XML;
+	XML.loadFile("mappingPoints.xml");
+
+	if( XML.pushTag("MAPPINGPOINTS", 0) ){
+		
+		for(int i = 0; i < v_points.size(); i++){
+			
+			if(XML.pushTag("POINT", i)){
+				v_points[i].x = XML.getValue("X",0.0f);
+				v_points[i].y = XML.getValue("Y",0.0f);
+				XML.popTag();
+			}
+			
+		}
+		
+		XML.popTag();
+	}
+	
+	
+}
 
 //--------------------------------------------------------------
 void testApp::draw(){
 	
 	ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-	
+		
 	if(outputMode == 1){
-		
-		ofBackground( 255, 255, 255 );
-		ofSetColor(150);
-		float col = screenWidth/12;
-		float row = screenHeight/8;
-		ofNoFill();
-		for(int i = 1; i < 11; i++)ofLine(0, row * i, screenWidth, row*i);
-		for(int i = 1; i < 12; i++)ofLine(col * i, 0, col * i, screenHeight);
-		ofCircle(screenWidth/2, screenHeight/2, 25);
-		
-		
-		ofSetColor(255, 0, 0);
-		switch (calibStage) {
-			case 1:
-				ttf.drawString(ofToString(calibCount,0), 20, 70);
-				break;
-				
-			case 2:
-				ttf.drawString(ofToString(calibCount,0), screenWidth - 70, screenHeight - 30);
-				break;
-				
-			case 3:
-				ttf.drawString(ofToString(calibCount,0), 20, screenHeight - 30);
-				break;
-				
-			case 10:
-				ttf.drawString("FAILED", screenWidth/2 - 150, screenHeight/2 - 25);
-				break;
-				
-		}
-		
 		glPushMatrix();
-		glTranslatef(screenWidth/2,screenHeight/2,0);
-		
-		
-		ofFill();
-		for(int i =0; i <activeList.size(); i++){
-			
-			
-			if(dsUsers[activeList[i]].isMoving){
-				ofCircle(dsUsers[activeList[i]].pos.x, 
-						 dsUsers[activeList[i]].pos.y, 
-						 10);
-				}else{
-					
-					if(dsUsers[activeList[i]].isFake){
-						ofNoFill();
-					}else{
-						ofFill();
-					}
-					   ofSetRectMode(OF_RECTMODE_CENTER);
-					   ofRect(dsUsers[activeList[i]].pos.x, 
-							  dsUsers[activeList[i]].pos.y,
-							  20,20);
-					   ofSetRectMode(OF_RECTMODE_CORNER);
-				}
-			
-		}
-		
+		glTranslatef(ofGetScreenWidth()/2 - screenWidth/2, 0, 0);
+		drawTest();
 		glPopMatrix();
-
 		
 	}else if(outputMode == 2){
-		
 		ofBackground(0);
-		
-		
-		
 		glPushMatrix();
-		glTranslatef(screenWidth/2,screenHeight/2,0);
-		for(int i = 0; i < stars2d.size(); i ++){ 
-			for(int j = 0; j < stars2d[i].size(); j ++){ 
-			stars2d[i][j]->drawBG(false);
-			}
-		}
-		
-		for(int i = 0; i < stars2d.size(); i ++){ 
-			for(int j = 0; j < stars2d[i].size(); j ++){ 
-				stars2d[i][j]->drawActiveAlgorithm(); 
-			}
-		}
-		
+		glTranslatef(ofGetScreenWidth()/2 - screenWidth/2, 0, 0);
+		drawRaw();
 		glPopMatrix();
-		
-		if(showPoints){
-			
-			glPushMatrix();
-			glTranslatef(screenWidth/2,screenHeight/2,0);
-			ofFill();
-			for(int i =0; i <activeList.size(); i++){
-				if(dsUsers[activeList[i]].isMoving){
-					ofCircle(dsUsers[activeList[i]].pos.x, 
-							 dsUsers[activeList[i]].pos.y, 
-							 10);
-				}else{
-					ofSetRectMode(OF_RECTMODE_CENTER);
-					ofRect(dsUsers[activeList[i]].pos.x, 
-						   dsUsers[activeList[i]].pos.y,
-						   10,10);
-					ofSetRectMode(OF_RECTMODE_CORNER);
-				}
-			}
-			glPopMatrix();
-		}
-			 
 		
 	}else if(outputMode == 3){
-		
-		
-		blurBG.begin(1,2);
-		ofClear(0, 0, 0, 255); //black bg
+		ofBackground(0);
 		glPushMatrix();
-		glTranslatef(screenWidth/2, screenHeight/2, 0);
-		for(int i = 0; i < stars2d.size(); i ++){ 
-			for(int j = 0; j < stars2d[i].size(); j ++){ 
-			stars2d[i][j]->drawBG(false);
+		glTranslatef(ofGetScreenWidth()/2 - screenWidth/2, 0, 0);
+		drawBlurred();
+		glPopMatrix();
+		
+	}else if(outputMode == 4){
+		
+		ofBackground(255);
+		fbo_tex.begin();
+		ofClear(0, 0, 0, 255);
+		glPushMatrix();
+		//drawRaw();
+		drawRaw();
+		glPopMatrix();
+		fbo_tex.end();
+	
+		ofPixels pixels;
+		fbo_tex.readToPixels(pixels);
+		map_tex.loadData(pixels);
+		
+		ofSetColor(255,255,255,255);
+		//bind and draw texture
+		//glEnable(GL_DEPTH_TEST);  
+		glPushMatrix();
+		glTranslatef(ofGetScreenWidth()/2 - screenWidth/2, 0, 0);
+		
+		map_tex.bind();
+		glBegin(GL_QUADS);
+		
+		for(int y = 0; y < gridSize - 1; y++){
+			for(int x = 0; x < gridSize - 1; x++){
+				
+				int i = x + (gridSize * y);
+				glTexCoord2f(t_points[i].x,t_points[i].y); 
+				glVertex2i(v_points[i].x, v_points[i].y); // top left 
+				
+				i += 1;
+				glTexCoord2f(t_points[i].x,t_points[i].y); 
+				glVertex2i(v_points[i].x, v_points[i].y); // top right 
+				
+				i += gridSize;
+				glTexCoord2f(t_points[i].x,t_points[i].y); 
+				glVertex2i(v_points[i].x, v_points[i].y); // bottom right 
+				
+				i -= 1;
+				glTexCoord2f(t_points[i].x,t_points[i].y); 
+				glVertex2i(v_points[i].x, v_points[i].y); // bottom left 
+				
+				
 			}
 		}
 		
-		glPopMatrix();
-		blurBG.end();
+		glEnd();
 		
-		ofSetColor(255);
-		blurBG.draw(); 
-		
-		ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-		ofSetColor(230,255,230, bg_alpha);
-		bg.draw(0,0,screenWidth,screenHeight);
-		ofDisableBlendMode();
-		
-		ofEnableBlendMode(OF_BLENDMODE_ADD);
-		glPushMatrix();
-		glTranslatef(screenWidth/2, screenHeight/2, 0);
-		
-		for(int i = 0; i < stars2d.size(); i ++){ 
-			for(int j = 0; j < stars2d[i].size(); j ++){ 
-				stars2d[i][j]->drawBG(true);
-			}
-		}
+		map_tex.unbind();
 		
 		glPopMatrix();
-		ofSetColor(255, 255, 255, 255);
-		ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-		ofDisableBlendMode();
+		//glDisable(GL_DEPTH_TEST); 
+	}else if(outputMode == 5){
 		
+		ofBackground(255);
 		glPushMatrix();
-		glTranslatef(screenWidth/2, screenHeight/2, 0);
-		for(int i = 0; i < stars2d.size(); i ++){ 
-			for(int j = 0; j < stars2d[i].size(); j ++){ 
-				stars2d[i][j]->drawActiveAlgorithm(); 
-			}
+		glTranslatef(ofGetScreenWidth()/2 - screenWidth/2, 0, 0);
+		sp.draw(0, 0, screenWidth,screenHeight);
+		
+		//draw image + quad points
+		for(int i = 0; i < v_points.size(); i++){
+			(i == selPoint ) ? ofSetColor(255, 0, 0):ofSetColor(0,255,0);
+			ofCircle(v_points[i].x , v_points[i].y, 2);
 		}
 		glPopMatrix();
-		ofSetColor(255, 255, 255, 255);
-		
-		
 	}
 	
 	ofSetColor(100, 100, 100);
 	ofDrawBitmapString(ofToString(ofGetFrameRate(),2), 20,20);
 	
 }
+void testApp::drawTest(){
+	
+	ofBackground( 255, 255, 255 );
+	ofSetColor(150);
+	float col = screenWidth/12;
+	float row = screenHeight/8;
+	ofNoFill();
+	for(int i = 1; i < 11; i++)ofLine(0, row * i, screenWidth, row*i);
+	for(int i = 1; i < 12; i++)ofLine(col * i, 0, col * i, screenHeight);
+	ofCircle(screenWidth/2, screenHeight/2, 25);
+	
+	
+	ofSetColor(255, 0, 0);
+	switch (calibStage) {
+		case 1:
+			ttf.drawString(ofToString(calibCount,0), 20, 70);
+			break;
+			
+		case 2:
+			ttf.drawString(ofToString(calibCount,0), screenWidth - 70, screenHeight - 30);
+			break;
+			
+		case 3:
+			ttf.drawString(ofToString(calibCount,0), 20, screenHeight - 30);
+			break;
+			
+		case 10:
+			ttf.drawString("FAILED", screenWidth/2 - 150, screenHeight/2 - 25);
+			break;
+			
+	}
+	
+	glPushMatrix();
+	glTranslatef(screenWidth/2,screenHeight/2,0);
+	
+	
+	ofFill();
+	for(int i =0; i <activeList.size(); i++){
+		
+		
+		if(dsUsers[activeList[i]].isMoving){
+			ofCircle(dsUsers[activeList[i]].pos.x, 
+					 dsUsers[activeList[i]].pos.y, 
+					 10);
+		}else{
+			
+			if(dsUsers[activeList[i]].isFake){
+				ofNoFill();
+			}else{
+				ofFill();
+			}
+			ofSetRectMode(OF_RECTMODE_CENTER);
+			ofRect(dsUsers[activeList[i]].pos.x, 
+				   dsUsers[activeList[i]].pos.y,
+				   20,20);
+			ofSetRectMode(OF_RECTMODE_CORNER);
+		}
+		
+	}
+	
+	glPopMatrix();
+	
 
+}
 
+void testApp::drawRaw(){
+	
 
+	//ofSetColor(0);
+	
+	
+	ofSetColor(255);
+	ofNoFill();
+	ofRect(1, 1, screenWidth + 2, screenHeight);
+	ofFill();
+	
+	glPushMatrix();
+	glTranslatef(screenWidth/2,screenHeight/2,0);
+	for(int i = 0; i < stars2d.size(); i ++){ 
+		for(int j = 0; j < stars2d[i].size(); j ++){ 
+			stars2d[i][j]->drawBG(false);
+		}
+	}
+	
+	for(int i = 0; i < stars2d.size(); i ++){ 
+		for(int j = 0; j < stars2d[i].size(); j ++){ 
+			stars2d[i][j]->drawActiveAlgorithm(); 
+		}
+	}
+	
+	glPopMatrix();
+	
+	if(showPoints){
+		
+		glPushMatrix();
+		glTranslatef(screenWidth/2,screenHeight/2,0);
+		ofFill();
+		for(int i =0; i <activeList.size(); i++){
+			if(dsUsers[activeList[i]].isMoving){
+				ofCircle(dsUsers[activeList[i]].pos.x, 
+						 dsUsers[activeList[i]].pos.y, 
+						 10);
+			}else{
+				ofSetRectMode(OF_RECTMODE_CENTER);
+				ofRect(dsUsers[activeList[i]].pos.x, 
+					   dsUsers[activeList[i]].pos.y,
+					   10,10);
+				ofSetRectMode(OF_RECTMODE_CORNER);
+			}
+		}
+		glPopMatrix();
+	}
+	
+
+}
+
+void testApp::drawBlurred(){
+
+	blurBG.begin(1,2);
+	ofClear(0, 0, 0, 255); //black bg
+	glPushMatrix();
+	glTranslatef(screenWidth/2, screenHeight/2, 0);
+	for(int i = 0; i < stars2d.size(); i ++){ 
+		for(int j = 0; j < stars2d[i].size(); j ++){ 
+			stars2d[i][j]->drawBG(false);
+		}
+	}
+	
+	glPopMatrix();
+	blurBG.end();
+	
+	ofSetColor(255);
+	blurBG.draw(); 
+	
+	ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+	ofSetColor(230,255,230, bg_alpha);
+	bg.draw(0,0,screenWidth,screenHeight);
+	ofDisableBlendMode();
+	
+	ofEnableBlendMode(OF_BLENDMODE_ADD);
+	glPushMatrix();
+	glTranslatef(screenWidth/2, screenHeight/2, 0);
+	
+	for(int i = 0; i < stars2d.size(); i ++){ 
+		for(int j = 0; j < stars2d[i].size(); j ++){ 
+			stars2d[i][j]->drawBG(true);
+		}
+	}
+	
+	glPopMatrix();
+	ofSetColor(255, 255, 255, 255);
+	ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+	ofDisableBlendMode();
+	
+	glPushMatrix();
+	glTranslatef(screenWidth/2, screenHeight/2, 0);
+	for(int i = 0; i < stars2d.size(); i ++){ 
+		for(int j = 0; j < stars2d[i].size(); j ++){ 
+			stars2d[i][j]->drawActiveAlgorithm(); 
+		}
+	}
+	glPopMatrix();
+	ofSetColor(255, 255, 255, 255);
+
+}
 
 //--------------------------------------------------------------
 void testApp::keyPressed  (int key){
 	
-	if(key == 'f')ofToggleFullscreen();
-	if(key == 'm')outputMode += 1; outputMode = outputMode%4;
-	if(key == 's')showPoints = !showPoints;
-	if(key == 't')testPoint = true;
-	if(key == 'q')dsUsers[activeList[0]].isMoving = !dsUsers[activeList[0]].isMoving;
-	if(key == '+')testIndex = (testIndex +1)%3;
 	
+	if(key == 'f')ofToggleFullscreen();
+	if(key == 'm')outputMode += 1; outputMode = outputMode%6;
+	
+
+	
+	if(outputMode != 5){
+		if(key == 's')showPoints = !showPoints;
+		if(key == 't')testPoint = true;
+		if(key == 'q')dsUsers[activeList[0]].isMoving = !dsUsers[activeList[0]].isMoving;
+		if(key == '+')testIndex = (testIndex +1)%3;
+	}else{
+		switch (key) {
+			case '-':
+				selPoint = selPoint = max(0, selPoint - 1);
+				break;
+			case '+':
+				selPoint = min((int)o_points.size(), selPoint + 1);
+				break;
+			case OF_KEY_RIGHT:
+				v_points[selPoint].x += 1;
+				break;
+			case OF_KEY_LEFT:
+				v_points[selPoint].x -= 1;
+				break;
+			case OF_KEY_DOWN:
+				v_points[selPoint].y += 1;
+				break;
+			case OF_KEY_UP:
+				v_points[selPoint].y -= 1;
+				break;
+			case 'S':
+				saveMappingPoints();
+				break;
+				
+		}
+
+	}
 }
 
 //--------------------------------------------------------------
@@ -571,7 +775,7 @@ void testApp::keyReleased(int key){
 void testApp::mouseMoved(int x, int y ){
 
 		for(int i =0; i< activeList.size(); i++){
-			dsUsers[activeList[i]].pos.set(x - screenWidth/2, y - screenHeight/2);
+			dsUsers[activeList[i]].pos.set(x - ofGetScreenWidth()/2, y - screenHeight/2);
 		}
 	
 }
@@ -589,7 +793,7 @@ void testApp::mousePressed(int x, int y, int button){
 		if(!dsUsers[testIndex].isActive){
 			dsUsers[testIndex].reset();
 			activeList.push_back(testIndex);
-			dsUsers[testIndex].pos.set(x -screenWidth/2,y-screenHeight/2);	
+			dsUsers[testIndex].pos.set(x -ofGetScreenWidth()/2,y-screenHeight/2);	
 		}else{
 			for(int i =0; i< activeList.size(); i++){
 				if(activeList[i] == testIndex){

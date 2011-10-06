@@ -95,7 +95,7 @@ public:
 		
 		ofSetColor(0);
 		ofFill();
-		ofCircle(0, 0, size* 0.2);
+		ofCircle(0, 0, -1,size* 0.2);
 		
 		ofSetColor(255);
 		
@@ -108,13 +108,16 @@ public:
 			float r = ofRandom(0,1);
 			
 			if(r < 0.9){
+				
 				ofVec2f p(ofRandom(-1,1) * size * 0.025,(0.2 + abs(rng() * 0.8)) * size);
 				p.rotate(lineRots[i%numLines],ofVec2f(0,0));
 				glVertex2f(p.x,p.y);
+				
 			}else if(eventTime > 0){
 				
 				ofVec2f p(ofRandom(-0.2,0.2) * size * hLines[i%numHlines].x,ofRandom(-0.05,0.05) * size * 0.2 + (hLines[i%numHlines].y * 0.2 * size));
 				glVertex2f(p.x,p.y);
+				
 			}
 			
 		}

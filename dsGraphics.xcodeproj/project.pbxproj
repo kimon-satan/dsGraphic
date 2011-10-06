@@ -16,7 +16,11 @@
 		D90E986A142918DF00E5F7C8 /* ofxOscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D90E9864142918DF00E5F7C8 /* ofxOscSender.cpp */; };
 		D91B1988142A3CF300FBE6D2 /* star.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D91B1984142A3CF300FBE6D2 /* star.cpp */; };
 		D91B1989142A3CF300FBE6D2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D91B1985142A3CF300FBE6D2 /* main.cpp */; };
-		D9E90BE5142BC2FD00F63805 /* testApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9E90BE4142BC2FD00F63805 /* testApp.cpp */; };
+		D924F2F3143E000C00BD7496 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D924F2EC143E000C00BD7496 /* tinyxml.cpp */; };
+		D924F2F4143E000C00BD7496 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D924F2EE143E000C00BD7496 /* tinyxmlerror.cpp */; };
+		D924F2F5143E000C00BD7496 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D924F2EF143E000C00BD7496 /* tinyxmlparser.cpp */; };
+		D924F2F6143E000C00BD7496 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D924F2F1143E000C00BD7496 /* ofxXmlSettings.cpp */; };
+		D9AAD9B4143DC58D005ED309 /* testApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AAD9B3143DC58D005ED309 /* testApp.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -100,12 +104,21 @@
 		D91B1985142A3CF300FBE6D2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/main.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D91B1986142A3CF300FBE6D2 /* dsUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dsUser.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/dsUser.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9231DE41433610700313CA7 /* regPulsingRings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = regPulsingRings.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/regPulsingRings.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D924F2EA143E000C00BD7496 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = install.xml; path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxXmlSettings/install.xml; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D924F2EC143E000C00BD7496 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxml.cpp; path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxXmlSettings/libs/tinyxml.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D924F2ED143E000C00BD7496 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tinyxml.h; path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxXmlSettings/libs/tinyxml.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D924F2EE143E000C00BD7496 /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlerror.cpp; path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxXmlSettings/libs/tinyxmlerror.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D924F2EF143E000C00BD7496 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlparser.cpp; path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxXmlSettings/libs/tinyxmlparser.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D924F2F1143E000C00BD7496 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxXmlSettings.cpp; path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxXmlSettings/src/ofxXmlSettings.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D924F2F2143E000C00BD7496 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxXmlSettings.h; path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxXmlSettings/src/ofxXmlSettings.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D989365B1434561600D4BE04 /* statFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = statFlow.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/statFlow.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D9AAD9B3143DC58D005ED309 /* testApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = testApp.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/testApp.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D9B3C1CD1439058500EC6938 /* pulseLines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pulseLines.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/pulseLines.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9D63E901432319F00BF0007 /* still.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = still.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/still.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9D63F551432507A00BF0007 /* pulsatingRings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pulsatingRings.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/pulsatingRings.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9D63F901432568600BF0007 /* strobingRings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = strobingRings.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/strobingRings.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9D640F91432711500BF0007 /* blackout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = blackout.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starAlgs/blackout.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
-		D9E90BE4142BC2FD00F63805 /* testApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = testApp.cpp; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/testApp.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		D9D707311439A7E20063EF3E /* schizoPoints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = schizoPoints.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/schizoPoints.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9F4E12C142F3EC700047A3F /* activeStarBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = activeStarBase.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/activeStarBase.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		D9F4E133142F440000047A3F /* starIncludes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = starIncludes.h; path = Library/Frameworks/of_preRelease_v007_osx/apps/myApps/dsGraphic/src/starIncludes.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
@@ -302,19 +315,52 @@
 			path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxOsc/src;
 			sourceTree = SYSTEM_DEVELOPER_DIR;
 		};
+		D924F2E9143E000C00BD7496 /* ofxXmlSettings */ = {
+			isa = PBXGroup;
+			children = (
+				D924F2EA143E000C00BD7496 /* install.xml */,
+				D924F2EB143E000C00BD7496 /* libs */,
+				D924F2F0143E000C00BD7496 /* src */,
+			);
+			name = ofxXmlSettings;
+			path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxXmlSettings;
+			sourceTree = SYSTEM_DEVELOPER_DIR;
+		};
+		D924F2EB143E000C00BD7496 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				D924F2EC143E000C00BD7496 /* tinyxml.cpp */,
+				D924F2ED143E000C00BD7496 /* tinyxml.h */,
+				D924F2EE143E000C00BD7496 /* tinyxmlerror.cpp */,
+				D924F2EF143E000C00BD7496 /* tinyxmlparser.cpp */,
+			);
+			name = libs;
+			path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxXmlSettings/libs;
+			sourceTree = SYSTEM_DEVELOPER_DIR;
+		};
+		D924F2F0143E000C00BD7496 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				D924F2F1143E000C00BD7496 /* ofxXmlSettings.cpp */,
+				D924F2F2143E000C00BD7496 /* ofxXmlSettings.h */,
+			);
+			name = src;
+			path = Library/Frameworks/of_preRelease_v007_osx/addons/ofxXmlSettings/src;
+			sourceTree = SYSTEM_DEVELOPER_DIR;
+		};
 		D9F4E131142F411C00047A3F /* activeStarClasses */ = {
 			isa = PBXGroup;
 			children = (
-				D9F4E12C142F3EC700047A3F /* activeStarBase.h */,
-				D9F4E133142F440000047A3F /* starIncludes.h */,
-				D9D63E901432319F00BF0007 /* still.h */,
 				D989365B1434561600D4BE04 /* statFlow.h */,
-				D9D63F551432507A00BF0007 /* pulsatingRings.h */,
-				D9D640F91432711500BF0007 /* blackout.h */,
-				D9D63F901432568600BF0007 /* strobingRings.h */,
-				D903617F1433085F006F290B /* strobingLines.h */,
 				D9231DE41433610700313CA7 /* regPulsingRings.h */,
+				D903617F1433085F006F290B /* strobingLines.h */,
+				D9D63F901432568600BF0007 /* strobingRings.h */,
 				D91B0711143875A10074A9D7 /* om.h */,
+				D9B3C1CD1439058500EC6938 /* pulseLines.h */,
+				D9D63E901432319F00BF0007 /* still.h */,
+				D9D640F91432711500BF0007 /* blackout.h */,
+				D9D63F551432507A00BF0007 /* pulsatingRings.h */,
+				D9D707311439A7E20063EF3E /* schizoPoints.h */,
 			);
 			name = activeStarClasses;
 			sourceTree = "<group>";
@@ -339,6 +385,7 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				D924F2E9143E000C00BD7496 /* ofxXmlSettings */,
 				D90E9844142918DE00E5F7C8 /* ofxOsc */,
 				D90E977B1429132700E5F7C8 /* ofxBlurShader */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
@@ -355,11 +402,13 @@
 			isa = PBXGroup;
 			children = (
 				D91B1985142A3CF300FBE6D2 /* main.cpp */,
-				D9E90BE4142BC2FD00F63805 /* testApp.cpp */,
+				D9AAD9B3143DC58D005ED309 /* testApp.cpp */,
 				D91B1981142A3CF300FBE6D2 /* testApp.h */,
 				D91B1983142A3CF300FBE6D2 /* star.h */,
 				D91B1984142A3CF300FBE6D2 /* star.cpp */,
 				D91B1986142A3CF300FBE6D2 /* dsUser.h */,
+				D9F4E12C142F3EC700047A3F /* activeStarBase.h */,
+				D9F4E133142F440000047A3F /* starIncludes.h */,
 				D9F4E131142F411C00047A3F /* activeStarClasses */,
 			);
 			path = src;
@@ -465,7 +514,11 @@
 				D90E986A142918DF00E5F7C8 /* ofxOscSender.cpp in Sources */,
 				D91B1988142A3CF300FBE6D2 /* star.cpp in Sources */,
 				D91B1989142A3CF300FBE6D2 /* main.cpp in Sources */,
-				D9E90BE5142BC2FD00F63805 /* testApp.cpp in Sources */,
+				D9AAD9B4143DC58D005ED309 /* testApp.cpp in Sources */,
+				D924F2F3143E000C00BD7496 /* tinyxml.cpp in Sources */,
+				D924F2F4143E000C00BD7496 /* tinyxmlerror.cpp in Sources */,
+				D924F2F5143E000C00BD7496 /* tinyxmlparser.cpp in Sources */,
+				D924F2F6143E000C00BD7496 /* ofxXmlSettings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

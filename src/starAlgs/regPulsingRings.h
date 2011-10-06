@@ -103,7 +103,7 @@ public:
 		
 		size = t_size;
 		pos = t_pos;
-		numpoints = min(3000,(int)size * 10);
+		numpoints = min(5000,(int)size * 13);
 		
 	}
 	

@@ -18,7 +18,8 @@ star::star(){
 	isUserMoving = false;
 	max_size = 300;
 	pairedUser = NULL;
-	float sizeArray[6] = {0.5,1,2.75,3.75,5.75,7.75};
+	//float sizeArray[6] = {0.5,1,2.25,2.75,6,7};
+	float sizeArray[6] = {0.5,1,2.25,2.75,4.25,5.25};
 	float probArray[6] = {0.16,0.16,0.3,0.24,0.1,0.06};
 	float cum = 0;
 	float rnd = ofRandom(0,1);
@@ -38,7 +39,7 @@ star::star(){
 	
 	if(size < 2){
 		alpha = 150;
-		intensity = (ofRandomf()> 0.7)? min(ofRandom(0.5,0.7),ofRandom(0.5,0.7)) : 0;
+		intensity = (ofRandomf()> 0.7)? 1.0 : 0;
 	}else if(size < 5){
 		alpha = 90;
 		intensity = 0;//min(ofRandom(0.05,0.2), ofRandom(0.05,0.2));
@@ -220,7 +221,9 @@ void star::drawBG(bool isAlpha){
 
 void star::drawActiveAlgorithm(){
 	
-	if(isActive)activeStar->draw();
+	if(isActive){
+		activeStar->draw();
+	}
 }
 
 void star::assignAlgorithm(int alg){
@@ -232,6 +235,7 @@ void star::assignAlgorithm(int alg){
 		case 2:activeStar = new regPulsingRings();break;
 		case 3:activeStar = new statFlow();break;
 		case 4:activeStar = new om();break;
+		case 5:activeStar = new schizoPoints();break;
 	
 		
 	}

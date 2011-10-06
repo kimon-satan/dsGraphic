@@ -36,6 +36,8 @@ public:
 		if(!isMoving){ 
 			stillCount += 1;
 		}else{ stillCount = 0;}
+		
+		if(ghostCount > 0)ghostCount += 1;
 	}
 	
 	int ghostCount;

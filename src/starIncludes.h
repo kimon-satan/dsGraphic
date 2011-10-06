@@ -14,9 +14,11 @@
 #include "regPulsingRings.h"
 #include "statFlow.h"
 #include "om.h"
+#include "schizoPoints.h"
 
 
 /* unused
+#include "pulseLines.h"
 #include "still.h" 
 #include "pulsatingRings.h"
 #include "blackout.h"

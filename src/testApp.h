@@ -5,6 +5,7 @@
 #include "dsUser.h"
 #include "star.h"
 #include "ofxBlurShader.h"
+#include "ofxXmlSettings.h"
 
 #define PORT 12345
 #define	HOST "localhost"
@@ -17,8 +18,11 @@ public:
 	void setup();
 	void update();
 	void draw();
-	
-
+	void drawRaw();
+	void drawBlurred();
+	void drawTest();
+	void saveMappingPoints();
+	void loadMappingPoints();
 	
 	void keyPressed(int key);
 	void keyReleased(int key);
@@ -40,7 +44,7 @@ private:
 	ofxOscReceiver	receiver;
 	ofxOscSender	sender;
 	ofTrueTypeFont ttf;
-	ofImage bg;
+	ofImage bg, sp;
 	
 	float screenWidth, screenHeight, columnWidth;
 	ofxBlurShader blurBG;
@@ -64,5 +68,17 @@ private:
 	bool testPoint;
 	int testIndex;
 	float radius, circum;
+	ofFbo fbo_tex;
+	ofTexture map_tex;
+
+	GLUquadricObj *quadric;
+	float w_prop, h_prop;
+	float sphereRot;
+	
+	vector<ofPoint> t_points;
+	vector<ofPoint> v_points;
+	vector<ofPoint> o_points;
+	
+	int gridSize, selPoint;
 	
 };
