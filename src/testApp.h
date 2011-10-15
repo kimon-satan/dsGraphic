@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include "ofMain.h"
 #include "ofxOsc.h"
 #include "dsUser.h"
@@ -10,6 +11,7 @@
 #define PORT 12345
 #define	HOST "localhost"
 #define SCPORT 57120
+
 
 
 class testApp : public ofBaseApp{
@@ -49,8 +51,8 @@ private:
 	float screenWidth, screenHeight, columnWidth;
 	ofxBlurShader blurBG;
 	ofxBlurShader blurFG;
-	float bg_alpha;
-	float intensity;
+	float bg_alpha, intensity, rotSpeed;
+	
 	
 	vector <int> activeList;
 	dsUser dsUsers[20];

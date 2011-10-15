@@ -18,37 +18,42 @@ star::star(){
 	isUserMoving = false;
 	max_size = 300;
 	pairedUser = NULL;
-	//float sizeArray[6] = {0.5,1,2.25,2.75,6,7};
-	float sizeArray[6] = {0.5,1,2.25,2.75,4.25,5.25};
-	float probArray[6] = {0.16,0.16,0.3,0.24,0.1,0.06};
-	float cum = 0;
-	float rnd = ofRandom(0,1);
-	int index = 5;
-	for(int i = 0; i < 6; i++){
-		cum += probArray[i];
-		if(rnd < cum){index = i;break;}
-	}
-	
-	size = sizeArray[index];
+	size = 1;
 	active_size = size;
-	
 	tc.r = 255;
 	tc.g = 255; 
 	tc.b = 255;
 	tc.a = 255; 
 	
+	twinkling = false;
+	
+	
+}
+
+void star::setupAttributes(){
+
+	float sizeArray[6] = {0.5,1,2.25,3.75,5.75,6.75};
+	float equator = abs(pos.y)* 2/worldHeight;
+	
+	boost::mt19937 g_cent(ofRandom(0,100));//a random seed
+	boost::normal_distribution<> norm_cent((float)(1-equator)/2.5f,0.25);
+	boost::variate_generator<boost::mt19937&,boost::normal_distribution<> > rng_cent(g_cent, norm_cent);
+	
+	int index = min(5.0 ,floor(abs(rng_cent()) * 6));
+	size = sizeArray[index];
+	active_size = sizeArray[index];
+	
 	if(size < 2){
 		alpha = 150;
-		intensity = (ofRandomf()> 0.7)? 1.0 : 0;
+		intensity = (ofRandomf()> 0.7)? 1 : 0;
 	}else if(size < 5){
-		alpha = 90;
-		intensity = 0;//min(ofRandom(0.05,0.2), ofRandom(0.05,0.2));
+		alpha = 90;//
+		intensity =  0;//min(ofRandom(0.05,0.2), ofRandom(0.05,0.2));
 	}else{
 		alpha = 50;
 		intensity = 0;
 	}
 	
-	twinkling = false;
 	base = intensity;
 	
 }
@@ -140,7 +145,7 @@ void star::findConflicts(){
 	}
 	
 	if(!growBlocked)active_size = min(max_size,active_size + 0.05f);
-	if(!moveBlocked && active_size > 25)pos = t_pos;
+	if(!moveBlocked && active_size > 5)pos = t_pos;
 		
 }
 

@@ -14,6 +14,8 @@
 #include "dsUser.h"
 #include "starIncludes.h"
 #include "activeStarBase.h"
+#include <boost/random.hpp>
+#include <boost/random/normal_distribution.hpp>
 
 class star{
 
@@ -22,6 +24,7 @@ public:
 	star();
 	~star();
 	
+	void setupAttributes();
 	void update();
 	void findConflicts();
 	void findIsCovered();
@@ -32,7 +35,7 @@ public:
 	
 	float rotSpeed;
 	ofVec2f pos;
-	float size, active_size, max_size, worldCircum;
+	float size, active_size, max_size, worldCircum, worldHeight;
 	float intensity, alpha;
 	int id, col;
 	bool twinkling, onScreen, isUserMoving;

@@ -53,7 +53,16 @@ public:
 		
 		if(newEvent){
 			
-			newEvent = true;
+			if(ofRandom(0,1) > 0.5){
+				
+				newEvent = false; //override to reduce number of events
+				eventTime = 0;
+			}
+		}
+		
+		
+		if(newEvent){
+			
 			eventLength = eventTime;
 			mul = 180.0f/eventTime;
 			t_point = eventTime * 0.2f;

@@ -24,6 +24,7 @@ public:
 		negMin = 500; negMax = 500;
 		posMin = 10; posMax = 10;
 		sd_edge = 0.25;
+		sd_center = 0.25;
 		count = 270;
 	};
 	
@@ -33,8 +34,18 @@ public:
 	void update(float t_size, ofVec2f t_pos){
 		
 		if(newEvent){
+		
+			if(ofRandom(0,1) > 0.15){
+			
+				newEvent = false; //override to reduce number of events
+				eventTime = 0;
+			}
+		}
+		
+		if(newEvent){
 			
 			if(eventPolarity < 0){
+				
 				eventLength = eventTime;
 				e_mul = 60.0f/eventLength;
 				c_mul = 0.36 * 5/eventLength;
