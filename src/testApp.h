@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <algorithm>
 #include "ofMain.h"
 #include "ofxOsc.h"
 #include "dsUser.h"
@@ -12,7 +12,7 @@
 #define	HOST "localhost"
 #define SCPORT 57120
 
-
+using namespace std;
 
 class testApp : public ofBaseApp{
 public:
@@ -25,6 +25,9 @@ public:
 	void drawTest();
 	void saveMappingPoints();
 	void loadMappingPoints();
+	
+
+
 	
 	void keyPressed(int key);
 	void keyReleased(int key);
@@ -54,7 +57,7 @@ private:
 	float bg_alpha, intensity, rotSpeed;
 	
 	
-	vector <int> activeList;
+	vector <dsUser *> activeList;
 	dsUser dsUsers[20];
 	
 	int outputMode;

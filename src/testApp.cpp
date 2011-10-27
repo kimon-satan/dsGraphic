@@ -1,5 +1,8 @@
 #include "testApp.h"
 
+bool isUserInactive(dsUser * d){return(!d->isActive);}
+bool isStarInactive(star * s){return(!s->isActive);}
+
 //--------------------------------------------------------------
 void testApp::setup(){
 	
@@ -164,7 +167,7 @@ void testApp::update(){
 			int id = m.getArgAsInt32(0);
 			if(!dsUsers[id].isActive){
 				dsUsers[id].reset();
-				activeList.push_back(id);
+				activeList.push_back(&dsUsers[id]);
 			}else{
 				dsUsers[id].ghostCount = 0;
 			}
@@ -209,18 +212,17 @@ void testApp::update(){
 	
 	for(int i =0; i< activeList.size(); i++){
 		
-		dsUsers[activeList[i]].updateHistory();
+		activeList[i]->updateHistory();
 		
-		if(dsUsers[activeList[i]].ghostCount > 10){
-			dsUsers[activeList[i]].isActive = false;
-			dsUsers[activeList[i]].isPaired = false;
-			activeList.erase(activeList.begin() + i);
-			cout << i << ":" << "end user " << ofGetFrameNum() << "\n";
-			break;
+		if(activeList[i]->ghostCount > 10){
+			activeList[i]->isActive = false;
+			activeList[i]->isPaired = false;
 		}
 		
 	}
 	
+	vector<dsUser *>::iterator it = remove_if(activeList.begin(), activeList.end(), isUserInactive); //erase all refs to inactive users
+	activeList.erase(it, activeList.end());
 	
 	
 	if(outputMode >= 2){
@@ -235,10 +237,9 @@ void testApp::update(){
 
 
 
+
 void testApp::manageStars(){
 	
-	
-	vector <int> eraseList;
 	
 	//first tidy up the active stars
 		
@@ -248,7 +249,16 @@ void testApp::manageStars(){
 			int col = findColumn(activeStarList[i]->pos.x);
 			
 			if(activeStarList[i]->col != col){
-				stars2d[col].push_back(activeStarList[i]); // put a star pointer into the relevant column - ONLY if a different column
+				// - ONLY if a different column
+				//erase old column reference
+				
+				vector<star *>::iterator it = remove(stars2d[activeStarList[i]->col].begin(), stars2d[activeStarList[i]->col].end(), 
+													   activeStarList[i]);
+
+				stars2d[activeStarList[i]->col].erase(it, stars2d[activeStarList[i]->col].end());
+				
+				 // put a new star pointer into the relevant column
+				stars2d[col].push_back(activeStarList[i]);
 				activeStarList[i]->col = col;
 			}
 			
@@ -257,26 +267,18 @@ void testApp::manageStars(){
 			m.setAddress("/endStar");
 			m.addIntArg(activeStarList[i]->pairedUser->id);
 			sender.sendMessage(m);
-			
-			
-				cout << i << ":" << "end active " << ofGetFrameNum() <<"\n";
-				activeStarList.erase(activeStarList.begin() + i);
-			break;
-			
-			
+		
 			
 		}		
 	} 
 	
+	vector<star *>::iterator it = remove_if(activeStarList.begin(), activeStarList.end(), isStarInactive); //erase all refs to inactive stars
+	activeStarList.erase(it, activeStarList.end());
 	
 	//then call update on all stars
 	for(int i = 0; i < stars2d.size(); i ++){
 		for(int j = 0; j < stars2d[i].size(); j ++){
-			if(stars2d[i][j]->col != i ){
-				stars2d[i].erase(stars2d[i].begin() + j); //delete old references
-				j -= 1;
-				
-			}else{
+	
 				stars2d[i][j]->update(); 
 				
 				if(stars2d[i][j]->isActive){
@@ -292,7 +294,7 @@ void testApp::manageStars(){
 					m.addFloatArg(stars2d[i][j]->pos.x/screenWidth);
 					sender.sendMessage(m);
 				}
-			}
+			
 		}
 	}
 	
@@ -402,9 +404,9 @@ void testApp::pairPointsnStars(){
 	
 	for(int i = 0; i < activeList.size(); i++){
 		
-		if(!dsUsers[activeList[i]].isPaired){
+		if(!activeList[i]->isPaired){
 			
-			if(dsUsers[activeList[i]].stillCount > 20){
+			if(activeList[i]->stillCount > 20){
 				
 				float dist = pow(distThresh,2);
 				star * st_pnt = NULL;
@@ -415,7 +417,7 @@ void testApp::pairPointsnStars(){
 				for(int k = 0; k < stars2d.size(); k++){
 					for(int j =0; j < stars2d[k].size(); j++){
 						if(!stars2d[k][j]->isActive && !stars2d[k][j]->isCovered && stars2d[k][j]->intensity > 0){ 
-							float td = stars2d[k][j]->pos.squareDistance(dsUsers[activeList[i]].pos); //brute force search for nearest star
+							float td = stars2d[k][j]->pos.squareDistance(activeList[i]->pos); //brute force search for nearest star
 							if(td < dist){
 								st_pnt = stars2d[k][j]; 
 								dist = td;
@@ -428,10 +430,10 @@ void testApp::pairPointsnStars(){
 				if(st_pnt != NULL){ 
 					
 					cout << i << ":" << "pair " << ofGetFrameNum();
-					dsUsers[activeList[i]].isPaired = true;
-					dsUsers[activeList[i]].starId = st_pnt->id;
+					activeList[i]->isPaired = true;
+					activeList[i]->starId = st_pnt->id;
 					st_pnt->isActive = true;
-					st_pnt->pairedUser = &dsUsers[activeList[i]];
+					st_pnt->pairedUser = activeList[i];
 					activeStarList.push_back(st_pnt);
 					
 					ofxOscMessage m;
@@ -702,20 +704,20 @@ void testApp::drawTest(){
 	for(int i =0; i <activeList.size(); i++){
 		
 		
-		if(dsUsers[activeList[i]].isMoving){
-			ofCircle(dsUsers[activeList[i]].pos.x, 
-					 dsUsers[activeList[i]].pos.y, 
+		if(activeList[i]->isMoving){
+			ofCircle(activeList[i]->pos.x, 
+					 activeList[i]->pos.y, 
 					 10);
 		}else{
 			
-			if(dsUsers[activeList[i]].isFake){
+			if(activeList[i]->isFake){
 				ofNoFill();
 			}else{
 				ofFill();
 			}
 			ofSetRectMode(OF_RECTMODE_CENTER);
-			ofRect(dsUsers[activeList[i]].pos.x, 
-				   dsUsers[activeList[i]].pos.y,
+			ofRect(activeList[i]->pos.x, 
+				   activeList[i]->pos.y,
 				   20,20);
 			ofSetRectMode(OF_RECTMODE_CORNER);
 		}
@@ -762,14 +764,14 @@ void testApp::drawRaw(){
 		glTranslatef(screenWidth/2,screenHeight/2,0);
 		ofFill();
 		for(int i =0; i <activeList.size(); i++){
-			if(dsUsers[activeList[i]].isMoving){
-				ofCircle(dsUsers[activeList[i]].pos.x, 
-						 dsUsers[activeList[i]].pos.y, 
+			if(activeList[i]->isMoving){
+				ofCircle(activeList[i]->pos.x, 
+						 activeList[i]->pos.y, 
 						 10);
 			}else{
 				ofSetRectMode(OF_RECTMODE_CENTER);
-				ofRect(dsUsers[activeList[i]].pos.x, 
-					   dsUsers[activeList[i]].pos.y,
+				ofRect(activeList[i]->pos.x, 
+					   activeList[i]->pos.y,
 					   10,10);
 				ofSetRectMode(OF_RECTMODE_CORNER);
 			}
@@ -849,7 +851,7 @@ void testApp::keyPressed  (int key){
 	if(outputMode != 6){
 		if(key == 's')showPoints = !showPoints;
 		if(key == 't')testPoint = true;
-		if(key == 'q')dsUsers[activeList[0]].isMoving = !dsUsers[activeList[0]].isMoving;
+		if(key == 'q')activeList[0]->isMoving = !activeList[0]->isMoving;
 		if(key == '+')testIndex = (testIndex +1)%3;
 	}else{
 		switch (key) {
@@ -889,7 +891,7 @@ void testApp::keyReleased(int key){
 void testApp::mouseMoved(int x, int y ){
 
 		for(int i =0; i< activeList.size(); i++){
-			dsUsers[activeList[i]].pos.set(x - ofGetScreenWidth()/2, y - screenHeight/2);
+			activeList[i]->pos.set(x - ofGetScreenWidth()/2, y - screenHeight/2);
 		}
 	
 }
@@ -906,19 +908,23 @@ void testApp::mousePressed(int x, int y, int button){
 		
 		if(!dsUsers[testIndex].isActive){
 			dsUsers[testIndex].reset();
-			activeList.push_back(testIndex);
+			activeList.push_back(&dsUsers[testIndex]);
 			dsUsers[testIndex].pos.set(x -ofGetScreenWidth()/2,y-screenHeight/2);	
 		}else{
 			for(int i =0; i< activeList.size(); i++){
-				if(activeList[i] == testIndex){
+				if(activeList[i]->id == testIndex){
 					dsUsers[testIndex].isActive = false;
 					dsUsers[testIndex].isPaired = false;
-					activeList.erase(activeList.begin() + i);
-					break;
+					
 				}
 			}
 		}
 	}
+	
+	vector<dsUser *>::iterator it = remove_if(activeList.begin(), activeList.end(), isUserInactive); //erase all refs to inactive users
+	activeList.erase(it, activeList.end());
+	
+	
 	
 }
 
